@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout>
+  <h1 class="text-2xl font-bold text-slate-800 mb-8">无碍e家</h1>
+  <p class="text-slate-600 mb-10">了解更多无障碍家居改造信息</p>
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <a href="/products" class="block p-6 bg-white rounded-lg border border-slate-200 hover:border-blue-300 hover:shadow-md transition">
+      <h2 class="text-lg font-semibold text-blue-600">改造家居</h2>
+      <p class="mt-2 text-slate-600 text-sm">肢体类、视障类、听障类产品</p>
+    </a>
+    <a href="/policies" class="block p-6 bg-white rounded-lg border border-slate-200 hover:border-blue-300 hover:shadow-md transition">
+      <h2 class="text-lg font-semibold text-blue-600">家居改造政策信息</h2>
+      <p class="mt-2 text-slate-600 text-sm">政策文件与法规</p>
+    </a>
+    <a href="/books" class="block p-6 bg-white rounded-lg border border-slate-200 hover:border-blue-300 hover:shadow-md transition">
+      <h2 class="text-lg font-semibold text-blue-600">经验分享</h2>
+      <p class="mt-2 text-slate-600 text-sm">无障碍改造相关书籍</p>
+    </a>
+  </div>
+</BaseLayout>

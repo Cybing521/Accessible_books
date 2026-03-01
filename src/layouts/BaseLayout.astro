@@ -1,0 +1,25 @@
+---
+import '../styles/global.css';
+interface Props { title?: string; }
+const { title = '无碍e家' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <header class="bg-white border-b border-slate-200 py-4 px-6">
+    <a href="/" class="text-xl font-semibold text-blue-600 hover:text-blue-700">无碍e家</a>
+  </header>
+  <main class="max-w-5xl mx-auto px-6 py-8">
+    <slot />
+  </main>
+  <footer class="border-t border-slate-200 py-6 px-6 text-center text-slate-500 text-sm">
+    无障碍家居改造信息平台
+  </footer>
+</body>
+</html>

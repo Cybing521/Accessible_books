@@ -1,0 +1,81 @@
+---
+interface Props {
+  books: Array<{
+    id: string;
+    title: string;
+    author: string;
+    audience: string;
+    summary: string;
+    cover: string;
+  }>;
+}
+const { books } = Astro.props;
+---
+<div id="book-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+<nav id="book-pagination" class="mt-8 flex justify-center gap-2 flex-wrap" aria-label="分页"></nav>
+
+<script define:vars={{ books }}>
+  const PER_PAGE = 12;
+  const listEl = document.getElementById('book-list');
+  const paginationEl = document.getElementById('book-pagination');
+
+  function escapeHtml(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function renderCard(b) {
+    const title = escapeHtml(b.title);
+    const author = escapeHtml(b.author || '');
+    const audience = escapeHtml(b.audience || '');
+    const summary = escapeHtml((b.summary || '').slice(0, 120) + ((b.summary || '').length > 120 ? '…' : ''));
+    const cover = escapeHtml(b.cover);
+    const authorLine = author && author !== '未知' ? `<p class="mt-1 text-sm text-slate-600">作者：${author}</p>` : '';
+    const audienceLine = audience ? `<p class="mt-1 text-sm text-slate-600">适用人群：${audience}</p>` : '';
+    return `
+      <article class="bg-white rounded-lg border border-slate-200 overflow-hidden flex">
+        <img src="${cover}" alt="${title}" class="w-24 h-32 sm:w-28 sm:h-36 object-cover bg-slate-100 flex-shrink-0" />
+        <div class="p-4 flex-1 min-w-0">
+          <h3 class="font-semibold text-slate-800">${title}</h3>
+          ${authorLine}
+          ${audienceLine}
+          <p class="mt-2 text-sm text-slate-600" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${summary}</p>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderPage(page) {
+    const totalPages = Math.max(1, Math.ceil(books.length / PER_PAGE));
+    const p = Math.min(Math.max(1, page), totalPages);
+    const start = (p - 1) * PER_PAGE;
+    const pageItems = books.slice(start, start + PER_PAGE);
+
+    listEl.innerHTML = pageItems.map(renderCard).join('');
+
+    paginationEl.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'px-3 py-1 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed';
+    prevBtn.textContent = '上一页';
+    prevBtn.disabled = p <= 1;
+    prevBtn.addEventListener('click', () => renderPage(p - 1));
+    paginationEl.appendChild(prevBtn);
+
+    const span = document.createElement('span');
+    span.className = 'px-3 py-1 text-slate-600';
+    span.textContent = `第 ${p} / ${totalPages} 页`;
+    paginationEl.appendChild(span);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'px-3 py-1 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed';
+    nextBtn.textContent = '下一页';
+    nextBtn.disabled = p >= totalPages;
+    nextBtn.addEventListener('click', () => renderPage(p + 1));
+    paginationEl.appendChild(nextBtn);
+  }
+
+  renderPage(1);
+</script>

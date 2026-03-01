@@ -1,0 +1,19 @@
+---
+interface Props {
+  name: string;
+  venue: string;
+  audience: string;
+  material: string;
+  image: string;
+}
+const { name, venue, audience, material, image } = Astro.props;
+---
+<article class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+  <img src={image} alt={name} class="w-full h-40 object-cover bg-slate-100" />
+  <div class="p-4">
+    <h3 class="font-semibold text-slate-800">{name}</h3>
+    <p class="mt-1 text-sm text-slate-600"><span class="text-slate-500">适用场所：</span>{venue || '—'}</p>
+    <p class="mt-1 text-sm text-slate-600"><span class="text-slate-500">适用人群：</span>{audience || '—'}</p>
+    <p class="mt-2 text-sm text-slate-600" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{material}</p>
+  </div>
+</article>
