@@ -101,7 +101,7 @@ const { products } = Astro.props;
 
   function filterProducts(query, category, venue) {
     let result = products;
-    if (category) result = result.filter(p => p.category === category);
+    if (category) result = result.filter(p => p.category && p.category.includes(category));
     if (venue) result = result.filter(p => p.venue === venue);
     const q = (query || '').trim().toLowerCase();
     if (q) {

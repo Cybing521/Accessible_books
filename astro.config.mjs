@@ -12,7 +12,12 @@ import pagefind from 'astro-pagefind';
 export default defineConfig({
   site: 'https://accessible-books.vercel.app',
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    server: {
+      hmr: { timeout: 120000 },
+      watch: { usePolling: false }
+    },
+    css: { devSourcemap: false }
   },
 
   adapter: vercel(),
