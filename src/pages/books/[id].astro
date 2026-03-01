@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import books from '../../data/books.json';
+
+export function getStaticPaths() {
+  return books.map((b) => ({ params: { id: b.id } }));
+}
+
+const { id } = Astro.params;
+const book = books.find((b) => b.id === id);
+if (!book) return Astro.redirect('/books');
+
+const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280"><rect width="200" height="280" rx="4" fill="#e2e8f0"/><rect x="20" y="30" width="160" height="220" rx="2" fill="#f1f5f9"/><line x1="100" y1="50" x2="100" y2="230" stroke="#94a3b8" stroke-width="1"/><text x="100" y="140" text-anchor="middle" fill="#64748b" font-size="14" font-family="serif">书</text></svg>');
+const coverSrc = book.cover?.includes('placeholder') ? PLACEHOLDER_IMG : book.cover;
+---
+<BaseLayout title={`${book.title} - 经验分享 - 无碍e家`}>
+  <nav class="mb-6 text-sm text-slate-600" aria-label="面包屑">
+    <a href="/" class="hover:text-blue-600">首页</a>
+    <span class="mx-2">/</span>
+    <a href="/books" class="hover:text-blue-600">经验分享</a>
+    <span class="mx-2">/</span>
+    <span class="text-slate-800">{book.title}</span>
+  </nav>
+
+  <article class="bg-white rounded-lg border border-slate-200 overflow-hidden flex flex-col sm:flex-row">
+    <img src={coverSrc} alt={book.title} class="w-48 h-64 sm:w-56 sm:h-72 object-cover bg-slate-100 flex-shrink-0" />
+    <div class="p-6 flex-1">
+      <h1 class="text-2xl font-bold text-slate-800 mb-4">{book.title}</h1>
+      <dl class="space-y-2 text-slate-600">
+        {book.author && book.author !== '未知' && (
+          <div>
+            <dt class="inline font-medium text-slate-500">作者：</dt>
+            <dd class="inline">{book.author}</dd>
+          </div>
+        )}
+        {book.audience && (
+          <div>
+            <dt class="inline font-medium text-slate-500">适用人群：</dt>
+            <dd class="inline">{book.audience}</dd>
+          </div>
+        )}
+      </dl>
+      <div class="mt-6 pt-6 border-t border-slate-200">
+        <h2 class="font-semibold text-slate-800 mb-2">内容简介</h2>
+        <p class="text-slate-600 leading-relaxed">{book.summary}</p>
+      </div>
+    </div>
+  </article>
+
+  <p class="mt-6">
+    <a href="/books" class="text-blue-600 hover:text-blue-700 hover:underline">← 返回书籍列表</a>
+  </p>
+</BaseLayout>

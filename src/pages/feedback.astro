@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="意见反馈 - 无碍e家">
+  <h1 class="text-2xl font-bold text-slate-800 mb-6">意见反馈</h1>
+  <p class="text-slate-600 mb-6">如有问题、建议或合作意向，欢迎与我们联系。</p>
+
+  <div class="max-w-xl space-y-4 bg-white rounded-lg border border-slate-200 p-6">
+    <p class="text-slate-600 mb-4">
+      您可以通过以下方式提交反馈：点击下方按钮将打开您的默认邮箱，并自动填写主题。
+    </p>
+    <a
+      href="mailto:?subject=【无碍e家】意见反馈&body=请在此处填写您的问题或建议："
+      class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400"
+    >
+      通过邮件提交反馈
+    </a>
+    <p class="mt-4 text-sm text-slate-500">
+      如需配置在线表单（如 Formspree），请将表单 action 替换为您的 Formspree 端点。
+    </p>
+  </div>
+</BaseLayout>

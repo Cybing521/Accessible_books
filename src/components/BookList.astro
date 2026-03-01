@@ -36,10 +36,11 @@ const { books } = Astro.props;
     const audience = escapeHtml(b.audience || '');
     const summary = escapeHtml((b.summary || '').slice(0, 120) + ((b.summary || '').length > 120 ? '…' : ''));
     const cover = getCoverSrc(b.cover);
+    const id = escapeHtml(b.id);
     const authorLine = author && author !== '未知' ? `<p class="mt-1 text-sm text-slate-600">作者：${author}</p>` : '';
     const audienceLine = audience ? `<p class="mt-1 text-sm text-slate-600">适用人群：${audience}</p>` : '';
     return `
-      <article class="bg-white rounded-lg border border-slate-200 overflow-hidden flex">
+      <a href="/books/${id}" class="block bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-blue-300 hover:shadow-md transition flex">
         <img src="${cover}" alt="${title}" class="w-24 h-32 sm:w-28 sm:h-36 object-cover bg-slate-100 flex-shrink-0" loading="lazy" />
         <div class="p-4 flex-1 min-w-0">
           <h3 class="font-semibold text-slate-800">${title}</h3>
@@ -47,7 +48,7 @@ const { books } = Astro.props;
           ${audienceLine}
           <p class="mt-2 text-sm text-slate-600" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${summary}</p>
         </div>
-      </article>
+      </a>
     `;
   }
 

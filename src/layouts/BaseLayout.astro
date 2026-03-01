@@ -1,7 +1,12 @@
 ---
 import '../styles/global.css';
-interface Props { title?: string; }
-const { title = '无碍e家' } = Astro.props;
+import Search from 'astro-pagefind/components/Search';
+interface Props {
+  title?: string;
+  showBreadcrumb?: boolean;
+  breadcrumb?: { label: string; href?: string }[];
+}
+const { title = '无碍e家', showBreadcrumb = false, breadcrumb = [] } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -9,17 +14,127 @@ const { title = '无碍e家' } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
+  <meta name="description" content="无碍e家 - 无障碍家居改造信息平台，提供改造家居产品、政策法规、经验分享" />
+  <meta name="keywords" content="无障碍,家居改造,适老化,无障碍设计,残疾人" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content="无碍e家 - 无障碍家居改造信息平台" />
+  <meta property="og:type" content="website" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
-  <header class="bg-white border-b border-slate-200 py-4 px-6">
-    <a href="/" class="text-xl font-semibold text-blue-600 hover:text-blue-700">无碍e家</a>
+  <a href="#main" class="skip-link">跳过导航，直达主内容</a>
+
+  <header class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <a href="/" class="text-xl font-semibold text-blue-600 hover:text-blue-700">无碍e家</a>
+      <div class="flex items-center gap-4">
+      <div id="pagefind-search" class="hidden sm:block"><Search id="search-modal" className="pagefind-search-trigger" uiOptions={{ showSubResults: true }} /></div>
+      <nav class="hidden sm:flex gap-6" aria-label="主导航">
+        <a href="/products" class="text-slate-600 hover:text-blue-600">改造家居</a>
+        <a href="/policies" class="text-slate-600 hover:text-blue-600">政策</a>
+        <a href="/books" class="text-slate-600 hover:text-blue-600">经验分享</a>
+        <a href="/about" class="text-slate-600 hover:text-blue-600">关于我们</a>
+      </nav>
+      </div>
+      <button type="button" id="mobile-menu-btn" class="sm:hidden p-2" aria-label="打开菜单" aria-expanded="false">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden sm:hidden mt-4 pb-2 border-t border-slate-200 pt-4">
+      <div class="mb-4"><Search id="search-mobile" className="pagefind-search-trigger" uiOptions={{ showSubResults: true }} /></div>
+      <nav class="flex flex-col gap-2" aria-label="移动端导航">
+        <a href="/products" class="py-2 text-slate-600 hover:text-blue-600">改造家居</a>
+        <a href="/policies" class="py-2 text-slate-600 hover:text-blue-600">政策</a>
+        <a href="/books" class="py-2 text-slate-600 hover:text-blue-600">经验分享</a>
+        <a href="/about" class="py-2 text-slate-600 hover:text-blue-600">关于我们</a>
+      </nav>
+    </div>
   </header>
-  <main class="max-w-5xl mx-auto px-6 py-8">
+
+  <main id="main" class="max-w-5xl mx-auto px-6 py-8" tabindex="-1">
+    {showBreadcrumb && breadcrumb.length > 0 && (
+      <nav class="mb-6 text-sm text-slate-600" aria-label="面包屑">
+        {breadcrumb.map((item, i) => (
+          <span>
+            {i > 0 && <span class="mx-2">/</span>}
+            {item.href ? <a href={item.href} class="hover:text-blue-600">{item.label}</a> : <span class="text-slate-800">{item.label}</span>}
+          </span>
+        ))}
+      </nav>
+    )}
     <slot />
   </main>
-  <footer class="border-t border-slate-200 py-6 px-6 text-center text-slate-500 text-sm">
-    无障碍家居改造信息平台
+
+  <footer class="border-t border-slate-200 py-6 px-6 mt-12">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="flex flex-wrap justify-center gap-4 mb-4 text-sm">
+        <span class="text-slate-500">无障碍工具：</span>
+        <button type="button" id="font-small" class="px-2 py-1 rounded hover:bg-slate-100" aria-label="小号字体">A-</button>
+        <button type="button" id="font-medium" class="px-2 py-1 rounded hover:bg-slate-100 font-medium" aria-label="中号字体">A</button>
+        <button type="button" id="font-large" class="px-2 py-1 rounded hover:bg-slate-100" aria-label="大号字体">A+</button>
+        <button type="button" id="dark-toggle" class="px-2 py-1 rounded hover:bg-slate-100" aria-label="切换深色模式">🌓</button>
+      </div>
+      <p class="text-slate-500 text-sm">无障碍家居改造信息平台</p>
+      <p class="mt-2 text-slate-400 text-xs">
+        <a href="/about" class="hover:text-slate-600">关于我们</a>
+        <span class="mx-2">|</span>
+        <a href="/faq" class="hover:text-slate-600">常见问题</a>
+        <span class="mx-2">|</span>
+        <a href="/feedback" class="hover:text-slate-600">意见反馈</a>
+      </p>
+    </div>
   </footer>
+
+  <button type="button" id="back-to-top" class="fixed bottom-8 right-8 p-3 rounded-full bg-blue-600 text-white shadow-lg opacity-0 pointer-events-none transition-opacity hover:bg-blue-700 focus:ring-2 focus:ring-blue-400" aria-label="返回顶部">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+  </button>
+
+  <script>
+    (function() {
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => {
+          const open = !mobileMenu.classList.contains('hidden');
+          mobileMenu.classList.toggle('hidden');
+          mobileBtn.setAttribute('aria-expanded', String(!open));
+        });
+      }
+
+      const fontSmall = document.getElementById('font-small');
+      const fontMedium = document.getElementById('font-medium');
+      const fontLarge = document.getElementById('font-large');
+      const fontSizes = { small: 'text-size-small', medium: 'text-size-medium', large: 'text-size-large' };
+      function setFontSize(size) {
+        document.documentElement.classList.remove('text-size-small', 'text-size-medium', 'text-size-large');
+        document.documentElement.classList.add(fontSizes[size]);
+        localStorage.setItem('font-size', size);
+        [fontSmall, fontMedium, fontLarge].forEach((b, i) => b?.classList.toggle('font-medium', ['small','medium','large'][i] === size));
+      }
+      fontSmall?.addEventListener('click', () => setFontSize('small'));
+      fontMedium?.addEventListener('click', () => setFontSize('medium'));
+      fontLarge?.addEventListener('click', () => setFontSize('large'));
+      setFontSize(localStorage.getItem('font-size') || 'medium');
+
+      const darkToggle = document.getElementById('dark-toggle');
+      darkToggle?.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('dark-mode', document.documentElement.classList.contains('dark'));
+      });
+      if (localStorage.getItem('dark-mode') === 'true') document.documentElement.classList.add('dark');
+
+      const backBtn = document.getElementById('back-to-top');
+      if (backBtn) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 400) {
+            backBtn.classList.remove('opacity-0', 'pointer-events-none');
+          } else {
+            backBtn.classList.add('opacity-0', 'pointer-events-none');
+          }
+        });
+        backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      }
+    })();
+  </script>
 </body>
 </html>
