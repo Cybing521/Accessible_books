@@ -20,8 +20,12 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# source data (not needed in deploy)
+# source data folders (not needed in deploy)
 产品图片/
+肢体类/
+视障类/
+听障类/
+政策文件/
 
 # jetbrains setting folder
 .idea/
