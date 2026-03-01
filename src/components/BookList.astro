@@ -11,12 +11,12 @@ interface Props {
 }
 const { books } = Astro.props;
 ---
-<div id="book-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
-<nav id="book-pagination" class="mt-8 flex justify-center gap-2 flex-wrap" aria-label="分页"></nav>
+<div id="book-list" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6"></div>
+<nav id="book-pagination" class="mt-10 flex justify-center gap-2.5 flex-wrap" aria-label="分页"></nav>
 
 <script define:vars={{ books }}>
   const PER_PAGE = 12;
-  const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280"><rect width="200" height="280" rx="4" fill="#e2e8f0"/><rect x="20" y="30" width="160" height="220" rx="2" fill="#f1f5f9"/><line x1="100" y1="50" x2="100" y2="230" stroke="#94a3b8" stroke-width="1"/><text x="100" y="140" text-anchor="middle" fill="#64748b" font-size="14" font-family="serif">书</text></svg>');
+  const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e8e0da"/><stop offset="50%" style="stop-color:#d6ccc4"/><stop offset="100%" style="stop-color:#e2dbd5"/></linearGradient></defs><rect width="200" height="280" rx="4" fill="url(#g)"/><rect x="70" y="110" width="60" height="4" rx="2" fill="#b4a79e" opacity="0.3"/><rect x="80" y="122" width="40" height="3" rx="1.5" fill="#b4a79e" opacity="0.2"/><rect x="85" y="132" width="30" height="3" rx="1.5" fill="#b4a79e" opacity="0.15"/></svg>');
   const listEl = document.getElementById('book-list');
   const paginationEl = document.getElementById('book-pagination');
 
@@ -30,23 +30,24 @@ const { books } = Astro.props;
     return src.startsWith('/') ? window.location.origin + src : src;
   }
 
-  function renderCard(b) {
+  function renderCard(b, i) {
     const title = escapeHtml(b.title);
     const author = escapeHtml(b.author || '');
     const audience = escapeHtml(b.audience || '');
     const summary = escapeHtml((b.summary || '').slice(0, 120) + ((b.summary || '').length > 120 ? '…' : ''));
     const cover = getCoverSrc(b.cover);
     const id = escapeHtml(b.id);
-    const authorLine = author && author !== '未知' ? `<p class="mt-1 text-sm text-slate-600">作者：${author}</p>` : '';
-    const audienceLine = audience ? `<p class="mt-1 text-sm text-slate-600">适用人群：${audience}</p>` : '';
+    const authorLine = author && author !== '未知' ? `<p class="mt-1 text-sm text-morandi-muted">作者：${author}</p>` : '';
+    const audienceLine = audience ? `<p class="mt-1 text-sm text-morandi-muted">适用人群：${audience}</p>` : '';
+    const delay = Math.min(i * 0.04, 0.3);
     return `
-      <a href="/books/${id}" class="block bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-blue-300 hover:shadow-md transition flex">
-        <img src="${cover}" alt="${title}" class="w-24 h-32 sm:w-28 sm:h-36 object-cover bg-slate-100 flex-shrink-0" loading="lazy" />
-        <div class="p-4 flex-1 min-w-0">
-          <h3 class="font-semibold text-slate-800">${title}</h3>
+      <a href="/books/${id}" class="block glass spring-card rounded-2xl overflow-hidden flex" style="animation: spring-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s both;">
+        <img src="${cover}" alt="${title}" class="w-24 h-32 sm:w-28 sm:h-36 object-cover flex-shrink-0" loading="lazy" style="background: linear-gradient(135deg, #e8e0da, #d6ccc4, #e2dbd5);" />
+        <div class="p-4 sm:p-5 flex-1 min-w-0">
+          <h3 class="font-semibold text-morandi-text text-[15px]">${title}</h3>
           ${authorLine}
           ${audienceLine}
-          <p class="mt-2 text-sm text-slate-600" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${summary}</p>
+          <p class="mt-2 text-sm text-morandi-subtle leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${summary}</p>
         </div>
       </a>
     `;
@@ -58,25 +59,25 @@ const { books } = Astro.props;
     const start = (p - 1) * PER_PAGE;
     const pageItems = books.slice(start, start + PER_PAGE);
 
-    listEl.innerHTML = pageItems.map(renderCard).join('');
+    listEl.innerHTML = pageItems.map((item, i) => renderCard(item, i)).join('');
 
     paginationEl.innerHTML = '';
     if (totalPages <= 1) return;
 
     const prevBtn = document.createElement('button');
-    prevBtn.className = 'px-3 py-1 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed';
+    prevBtn.className = 'px-4 py-2 rounded-xl glass spring-btn text-sm text-morandi-muted disabled:opacity-40 disabled:cursor-not-allowed';
     prevBtn.textContent = '上一页';
     prevBtn.disabled = p <= 1;
     prevBtn.addEventListener('click', () => renderPage(p - 1));
     paginationEl.appendChild(prevBtn);
 
     const span = document.createElement('span');
-    span.className = 'px-3 py-1 text-slate-600';
-    span.textContent = `第 ${p} / ${totalPages} 页`;
+    span.className = 'px-4 py-2 text-morandi-subtle text-sm';
+    span.textContent = `${p} / ${totalPages}`;
     paginationEl.appendChild(span);
 
     const nextBtn = document.createElement('button');
-    nextBtn.className = 'px-3 py-1 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed';
+    nextBtn.className = 'px-4 py-2 rounded-xl glass spring-btn text-sm text-morandi-muted disabled:opacity-40 disabled:cursor-not-allowed';
     nextBtn.textContent = '下一页';
     nextBtn.disabled = p >= totalPages;
     nextBtn.addEventListener('click', () => renderPage(p + 1));

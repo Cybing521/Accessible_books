@@ -10,44 +10,39 @@ const { id } = Astro.params;
 const book = books.find((b) => b.id === id);
 if (!book) return Astro.redirect('/books');
 
-const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280"><rect width="200" height="280" rx="4" fill="#e2e8f0"/><rect x="20" y="30" width="160" height="220" rx="2" fill="#f1f5f9"/><line x1="100" y1="50" x2="100" y2="230" stroke="#94a3b8" stroke-width="1"/><text x="100" y="140" text-anchor="middle" fill="#64748b" font-size="14" font-family="serif">书</text></svg>');
+const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e8e0da"/><stop offset="50%" style="stop-color:#d6ccc4"/><stop offset="100%" style="stop-color:#e2dbd5"/></linearGradient></defs><rect width="200" height="280" rx="4" fill="url(#g)"/><rect x="70" y="110" width="60" height="4" rx="2" fill="#b4a79e" opacity="0.3"/><rect x="80" y="122" width="40" height="3" rx="1.5" fill="#b4a79e" opacity="0.2"/></svg>');
 const coverSrc = book.cover?.includes('placeholder') ? PLACEHOLDER_IMG : book.cover;
 ---
-<BaseLayout title={`${book.title} - 经验分享 - 无碍e家`}>
-  <nav class="mb-6 text-sm text-slate-600" aria-label="面包屑">
-    <a href="/" class="hover:text-blue-600">首页</a>
-    <span class="mx-2">/</span>
-    <a href="/books" class="hover:text-blue-600">经验分享</a>
-    <span class="mx-2">/</span>
-    <span class="text-slate-800">{book.title}</span>
-  </nav>
-
-  <article class="bg-white rounded-lg border border-slate-200 overflow-hidden flex flex-col sm:flex-row">
-    <img src={coverSrc} alt={book.title} class="w-48 h-64 sm:w-56 sm:h-72 object-cover bg-slate-100 flex-shrink-0" />
-    <div class="p-6 flex-1">
-      <h1 class="text-2xl font-bold text-slate-800 mb-4">{book.title}</h1>
-      <dl class="space-y-2 text-slate-600">
+<BaseLayout title={`${book.title} - 经验分享 - 无碍e家`} showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '经验分享', href: '/books' }, { label: book.title }]}>
+  <article class="glass-strong rounded-2xl overflow-hidden animate-spring-in flex flex-col sm:flex-row">
+    <img src={coverSrc} alt={book.title} class="w-full sm:w-52 h-64 sm:h-auto object-cover flex-shrink-0 object-top" style="background: linear-gradient(135deg, #e8e0da, #d6ccc4, #e2dbd5);" />
+    <div class="p-6 sm:p-10 flex-1">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-6">{book.title}</h1>
+      <dl class="space-y-3 text-morandi-muted text-[15px]">
         {book.author && book.author !== '未知' && (
-          <div>
-            <dt class="inline font-medium text-slate-500">作者：</dt>
-            <dd class="inline">{book.author}</dd>
+          <div class="flex gap-2">
+            <dt class="font-medium text-morandi-subtle min-w-[5em]">作者</dt>
+            <dd>{book.author}</dd>
           </div>
         )}
         {book.audience && (
-          <div>
-            <dt class="inline font-medium text-slate-500">适用人群：</dt>
-            <dd class="inline">{book.audience}</dd>
+          <div class="flex gap-2">
+            <dt class="font-medium text-morandi-subtle min-w-[5em]">适用人群</dt>
+            <dd>{book.audience}</dd>
           </div>
         )}
       </dl>
-      <div class="mt-6 pt-6 border-t border-slate-200">
-        <h2 class="font-semibold text-slate-800 mb-2">内容简介</h2>
-        <p class="text-slate-600 leading-relaxed">{book.summary}</p>
+      <div class="mt-8 pt-6 border-t border-morandi-border">
+        <h2 class="font-semibold text-morandi-text mb-3">内容简介</h2>
+        <p class="text-morandi-muted leading-relaxed text-[15px]">{book.summary}</p>
       </div>
     </div>
   </article>
 
-  <p class="mt-6">
-    <a href="/books" class="text-blue-600 hover:text-blue-700 hover:underline">← 返回书籍列表</a>
+  <p class="mt-10">
+    <a href="/books" class="inline-flex items-center gap-2 text-sm text-morandi-muted hover:text-morandi-text spring-btn transition-colors duration-300">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+      返回书籍列表
+    </a>
   </p>
 </BaseLayout>

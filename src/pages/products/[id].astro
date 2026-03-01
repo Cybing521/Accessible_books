@@ -10,44 +10,39 @@ const { id } = Astro.params;
 const product = products.find((p) => p.id === id);
 if (!product) return Astro.redirect('/products');
 
-const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="#f1f5f9"/><rect x="120" y="100" width="160" height="100" rx="4" fill="#e2e8f0"/><path d="M160 140l40 30 40-50 20 60" stroke="#94a3b8" stroke-width="2" fill="none"/><circle cx="180" cy="130" r="15" fill="#94a3b8"/><text x="200" y="230" text-anchor="middle" fill="#64748b" font-size="14" font-family="sans-serif">产品图片</text></svg>');
+const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e8e0da"/><stop offset="50%" style="stop-color:#d6ccc4"/><stop offset="100%" style="stop-color:#e2dbd5"/></linearGradient></defs><rect width="400" height="300" fill="url(#g)"/><circle cx="200" cy="130" r="28" fill="none" stroke="#b4a79e" stroke-width="1.5" opacity="0.5"/><text x="200" y="185" text-anchor="middle" fill="#b4a79e" font-size="12" font-family="system-ui" opacity="0.6">暂无图片</text></svg>');
 const imageSrc = product.image?.includes('placeholder') ? PLACEHOLDER_IMG : product.image;
 ---
-<BaseLayout title={`${product.name} - 改造家居 - 无碍e家`}>
-  <nav class="mb-6 text-sm text-slate-600" aria-label="面包屑">
-    <a href="/" class="hover:text-blue-600">首页</a>
-    <span class="mx-2">/</span>
-    <a href="/products" class="hover:text-blue-600">改造家居</a>
-    <span class="mx-2">/</span>
-    <span class="text-slate-800">{product.name}</span>
-  </nav>
-
-  <article class="bg-white rounded-lg border border-slate-200 overflow-hidden">
-    <img src={imageSrc} alt={product.name} class="w-full max-w-2xl mx-auto h-64 object-cover bg-slate-100" />
-    <div class="p-6">
-      <h1 class="text-2xl font-bold text-slate-800 mb-4">{product.name}</h1>
-      <dl class="space-y-2 text-slate-600">
-        <div>
-          <dt class="inline font-medium text-slate-500">产品分类：</dt>
-          <dd class="inline">{product.category}</dd>
+<BaseLayout title={`${product.name} - 改造家居 - 无碍e家`} showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '改造家居', href: '/products' }, { label: product.name }]}>
+  <article class="glass-strong rounded-2xl overflow-hidden animate-spring-in">
+    <img src={imageSrc} alt={product.name} class="w-full max-w-3xl mx-auto h-64 sm:h-80 object-cover" style="background: linear-gradient(135deg, #e8e0da, #d6ccc4, #e2dbd5);" />
+    <div class="p-6 sm:p-10">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-6">{product.name}</h1>
+      <dl class="space-y-3 text-morandi-muted text-[15px]">
+        <div class="flex gap-2">
+          <dt class="font-medium text-morandi-subtle min-w-[5em]">产品分类</dt>
+          <dd>{product.category}</dd>
         </div>
-        <div>
-          <dt class="inline font-medium text-slate-500">适用场所：</dt>
-          <dd class="inline">{product.venue || '通用'}</dd>
+        <div class="flex gap-2">
+          <dt class="font-medium text-morandi-subtle min-w-[5em]">适用场所</dt>
+          <dd>{product.venue || '通用'}</dd>
         </div>
-        <div>
-          <dt class="inline font-medium text-slate-500">适用人群：</dt>
-          <dd class="inline">{product.audience || '—'}</dd>
+        <div class="flex gap-2">
+          <dt class="font-medium text-morandi-subtle min-w-[5em]">适用人群</dt>
+          <dd>{product.audience || '—'}</dd>
         </div>
       </dl>
-      <div class="mt-6 pt-6 border-t border-slate-200">
-        <h2 class="font-semibold text-slate-800 mb-2">产品说明</h2>
-        <p class="text-slate-600 whitespace-pre-line leading-relaxed">{product.material}</p>
+      <div class="mt-8 pt-6 border-t border-morandi-border">
+        <h2 class="font-semibold text-morandi-text mb-3">产品说明</h2>
+        <p class="text-morandi-muted whitespace-pre-line leading-relaxed text-[15px]">{product.material}</p>
       </div>
     </div>
   </article>
 
-  <p class="mt-6">
-    <a href="/products" class="text-blue-600 hover:text-blue-700 hover:underline">← 返回产品列表</a>
+  <p class="mt-10">
+    <a href="/products" class="inline-flex items-center gap-2 text-sm text-morandi-muted hover:text-morandi-text spring-btn transition-colors duration-300">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+      返回产品列表
+    </a>
   </p>
 </BaseLayout>

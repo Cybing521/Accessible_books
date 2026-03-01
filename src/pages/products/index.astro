@@ -4,7 +4,9 @@ import ProductSearch from '../../components/ProductSearch.astro';
 import products from '../../data/products.json';
 ---
 <BaseLayout title="改造家居 - 无碍e家" showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '改造家居' }]}>
-  <h1 class="text-2xl font-bold text-slate-800 mb-6">改造家居</h1>
-  <p class="text-slate-600 mb-6">肢体类、视障类、听障类无障碍家居产品</p>
+  <div class="mb-10 animate-spring-fade">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-2">改造家居</h1>
+    <p class="text-morandi-muted">肢体类、视障类、听障类无障碍家居产品</p>
+  </div>
   <ProductSearch products={products} />
 </BaseLayout>

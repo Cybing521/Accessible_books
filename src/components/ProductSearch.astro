@@ -12,36 +12,36 @@ interface Props {
 }
 const { products } = Astro.props;
 ---
-<div class="mb-6 space-y-4">
+<div class="mb-8 space-y-5 animate-spring-fade">
   <input
     type="search"
     id="product-search"
     placeholder="搜索产品名称、适用场所、适用人群..."
-    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    class="w-full px-5 py-3 glass rounded-xl text-morandi-text placeholder-morandi-subtle focus:outline-none focus:ring-2 focus:ring-morandi-accent/30 transition-all duration-300"
     aria-label="搜索产品"
   />
-  <div class="flex flex-wrap gap-2" role="group" aria-label="筛选">
-    <span class="text-sm text-slate-600 py-1">分类：</span>
-    <button type="button" data-filter-cat="" class="filter-cat px-3 py-1 rounded-full text-sm border border-slate-300 bg-blue-50 text-blue-700 border-blue-300">全部</button>
-    <button type="button" data-filter-cat="肢体类" class="filter-cat px-3 py-1 rounded-full text-sm border border-slate-300 text-slate-600 hover:bg-slate-50">肢体类</button>
-    <button type="button" data-filter-cat="视障类" class="filter-cat px-3 py-1 rounded-full text-sm border border-slate-300 text-slate-600 hover:bg-slate-50">视障类</button>
-    <button type="button" data-filter-cat="听障类" class="filter-cat px-3 py-1 rounded-full text-sm border border-slate-300 text-slate-600 hover:bg-slate-50">听障类</button>
-    <span class="text-sm text-slate-600 py-1 ml-4">场所：</span>
-    <select id="product-venue" class="px-3 py-1 rounded-lg border border-slate-300 text-sm text-slate-700 focus:ring-2 focus:ring-blue-500" aria-label="按适用场所筛选">
+  <div class="flex flex-wrap items-center gap-2.5" role="group" aria-label="筛选">
+    <span class="text-xs uppercase tracking-widest text-morandi-subtle mr-1">分类</span>
+    <button type="button" data-filter-cat="" class="filter-cat px-4 py-2 rounded-xl text-sm spring-btn glass-strong text-morandi-text font-medium active-filter">全部</button>
+    <button type="button" data-filter-cat="肢体类" class="filter-cat px-4 py-2 rounded-xl text-sm spring-btn glass text-morandi-muted">肢体类</button>
+    <button type="button" data-filter-cat="视障类" class="filter-cat px-4 py-2 rounded-xl text-sm spring-btn glass text-morandi-muted">视障类</button>
+    <button type="button" data-filter-cat="听障类" class="filter-cat px-4 py-2 rounded-xl text-sm spring-btn glass text-morandi-muted">听障类</button>
+    <span class="text-xs uppercase tracking-widest text-morandi-subtle ml-3 mr-1">场所</span>
+    <select id="product-venue" class="px-4 py-2 rounded-xl text-sm glass text-morandi-muted focus:outline-none focus:ring-2 focus:ring-morandi-accent/30" aria-label="按适用场所筛选">
       <option value="">全部</option>
     </select>
   </div>
 </div>
-<div id="product-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
-<div id="product-empty" class="hidden text-center py-16 text-slate-500">
-  <p class="text-lg">暂无匹配的产品</p>
-  <p class="mt-2 text-sm">尝试调整搜索关键词或筛选条件</p>
+<div id="product-list" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6"></div>
+<div id="product-empty" class="hidden text-center py-20 text-morandi-muted">
+  <p class="text-morandi-text">暂无匹配的产品</p>
+  <p class="mt-2 text-sm text-morandi-subtle">尝试调整搜索关键词或筛选条件</p>
 </div>
-<nav id="pagination" class="mt-8 flex justify-center gap-2 flex-wrap" aria-label="分页"></nav>
+<nav id="pagination" class="mt-10 flex justify-center gap-2.5 flex-wrap" aria-label="分页"></nav>
 
 <script define:vars={{ products }}>
   const PER_PAGE = 12;
-  const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="#f1f5f9"/><rect x="120" y="100" width="160" height="100" rx="4" fill="#e2e8f0"/><path d="M160 140l40 30 40-50 20 60" stroke="#94a3b8" stroke-width="2" fill="none"/><circle cx="180" cy="130" r="15" fill="#94a3b8"/><text x="200" y="230" text-anchor="middle" fill="#64748b" font-size="14" font-family="sans-serif">产品图片</text></svg>');
+  const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e8e0da"/><stop offset="50%" style="stop-color:#d6ccc4"/><stop offset="100%" style="stop-color:#e2dbd5"/></linearGradient></defs><rect width="400" height="300" fill="url(#g)"/><circle cx="200" cy="130" r="28" fill="none" stroke="#b4a79e" stroke-width="1.5" opacity="0.5"/><path d="M188 130l8 8 16-16" stroke="#b4a79e" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/><text x="200" y="185" text-anchor="middle" fill="#b4a79e" font-size="12" font-family="system-ui" opacity="0.6">暂无图片</text></svg>');
   const searchEl = document.getElementById('product-search');
   const listEl = document.getElementById('product-list');
   const paginationEl = document.getElementById('pagination');
@@ -55,21 +55,22 @@ const { products } = Astro.props;
     if (!src || src.includes('placeholder')) return PLACEHOLDER_IMG;
     return src.startsWith('data:') ? src : (src.startsWith('/') ? window.location.origin + src : src);
   }
-  function renderCard(p) {
+  function renderCard(p, i) {
     const venue = escapeHtml(p.venue || '—');
     const audience = escapeHtml(p.audience || '—');
     const material = escapeHtml((p.material || '').slice(0, 80) + ((p.material || '').length > 80 ? '…' : ''));
     const name = escapeHtml(p.name);
     const imageSrc = getImageSrc(p.image);
     const id = escapeHtml(p.id);
+    const delay = Math.min(i * 0.04, 0.3);
     return `
-      <a href="/products/${id}" class="block bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-blue-300 hover:shadow-md transition">
-        <img src="${imageSrc}" alt="${name}" class="w-full h-40 object-cover bg-slate-100" loading="lazy" />
-        <div class="p-4">
-          <h3 class="font-semibold text-slate-800">${name}</h3>
-          <p class="mt-1 text-sm text-slate-600"><span class="text-slate-500">适用场所：</span>${venue}</p>
-          <p class="mt-1 text-sm text-slate-600"><span class="text-slate-500">适用人群：</span>${audience}</p>
-          <p class="mt-2 text-sm text-slate-600" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${material}</p>
+      <a href="/products/${id}" class="block glass spring-card rounded-2xl overflow-hidden" style="animation: spring-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s both;">
+        <img src="${imageSrc}" alt="${name}" class="w-full h-44 object-cover" loading="lazy" style="background: linear-gradient(135deg, #e8e0da, #d6ccc4, #e2dbd5);" />
+        <div class="p-5">
+          <h3 class="font-semibold text-morandi-text text-[15px]">${name}</h3>
+          <p class="mt-2 text-sm text-morandi-muted"><span class="text-morandi-subtle">适用场所：</span>${venue}</p>
+          <p class="mt-1 text-sm text-morandi-muted"><span class="text-morandi-subtle">适用人群：</span>${audience}</p>
+          <p class="mt-2.5 text-sm text-morandi-subtle leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${material}</p>
         </div>
       </a>
     `;
@@ -88,11 +89,11 @@ const { products } = Astro.props;
   document.querySelectorAll('.filter-cat').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-cat').forEach(b => {
-        b.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-300');
-        b.classList.add('text-slate-600');
+        b.classList.remove('glass-strong', 'text-morandi-text', 'font-medium', 'active-filter');
+        b.classList.add('glass', 'text-morandi-muted');
       });
-      btn.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-300');
-      btn.classList.remove('text-slate-600');
+      btn.classList.add('glass-strong', 'text-morandi-text', 'font-medium', 'active-filter');
+      btn.classList.remove('glass', 'text-morandi-muted');
       update();
     });
   });
@@ -132,25 +133,25 @@ const { products } = Astro.props;
     }
     listEl.classList.remove('hidden');
     emptyEl.classList.add('hidden');
-    listEl.innerHTML = pageItems.map(renderCard).join('');
+    listEl.innerHTML = pageItems.map((item, i) => renderCard(item, i)).join('');
 
     paginationEl.innerHTML = '';
     if (totalPages <= 1) return;
 
     const prevBtn = document.createElement('button');
-    prevBtn.className = 'px-3 py-1 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed';
+    prevBtn.className = 'px-4 py-2 rounded-xl glass spring-btn text-sm text-morandi-muted disabled:opacity-40 disabled:cursor-not-allowed';
     prevBtn.textContent = '上一页';
     prevBtn.disabled = p <= 1;
     prevBtn.addEventListener('click', () => { renderPage(filtered, p - 1); });
     paginationEl.appendChild(prevBtn);
 
     const span = document.createElement('span');
-    span.className = 'px-3 py-1 text-slate-600';
-    span.textContent = `第 ${p} / ${totalPages} 页`;
+    span.className = 'px-4 py-2 text-morandi-subtle text-sm';
+    span.textContent = `${p} / ${totalPages}`;
     paginationEl.appendChild(span);
 
     const nextBtn = document.createElement('button');
-    nextBtn.className = 'px-3 py-1 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed';
+    nextBtn.className = 'px-4 py-2 rounded-xl glass spring-btn text-sm text-morandi-muted disabled:opacity-40 disabled:cursor-not-allowed';
     nextBtn.textContent = '下一页';
     nextBtn.disabled = p >= totalPages;
     nextBtn.addEventListener('click', () => { renderPage(filtered, p + 1); });
@@ -159,7 +160,7 @@ const { products } = Astro.props;
 
   function update() {
     const query = searchEl.value;
-    const activeCat = document.querySelector('.filter-cat.bg-blue-50')?.dataset.filterCat || '';
+    const activeCat = document.querySelector('.filter-cat.active-filter')?.dataset.filterCat || '';
     const venue = venueSelect.value || '';
     const filtered = filterProducts(query, activeCat, venue);
     renderPage(filtered, 1);

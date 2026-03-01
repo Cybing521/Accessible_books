@@ -4,19 +4,19 @@ interface Props {
 }
 const { policies } = Astro.props;
 ---
-<div class="mb-6">
+<div class="mb-8 animate-spring-fade">
   <input
     type="search"
     id="policy-search"
     placeholder="搜索政策标题..."
-    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    class="w-full px-5 py-3 glass rounded-xl text-morandi-text placeholder-morandi-subtle focus:outline-none focus:ring-2 focus:ring-morandi-accent/30 transition-all duration-300"
     aria-label="搜索政策"
   />
 </div>
 <ul id="policy-list" class="space-y-3"></ul>
-<div id="policy-empty" class="hidden text-center py-16 text-slate-500">
-  <p class="text-lg">暂无匹配的政策文件</p>
-  <p class="mt-2 text-sm">尝试调整搜索关键词</p>
+<div id="policy-empty" class="hidden text-center py-20 text-morandi-muted">
+  <p class="text-morandi-text">暂无匹配的政策文件</p>
+  <p class="mt-2 text-sm text-morandi-subtle">尝试调整搜索关键词</p>
 </div>
 
 <script define:vars={{ policies }}>
@@ -30,15 +30,19 @@ const { policies } = Astro.props;
     return div.innerHTML;
   }
 
-  function renderItem(p) {
+  function renderItem(p, i) {
     const title = escapeHtml(p.title);
     const file = escapeHtml(p.file);
+    const delay = Math.min(i * 0.03, 0.25);
     return `
-      <li>
+      <li style="animation: spring-fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s both;">
         <a href="${file}" target="_blank" rel="noopener noreferrer"
-          class="block p-4 bg-white rounded-lg border border-slate-200 hover:border-blue-300 hover:shadow transition">
-          <span class="font-medium text-slate-800">${title}</span>
-          <span class="ml-2 text-blue-600 text-sm">→ 打开 PDF</span>
+          class="flex items-center gap-4 p-5 glass spring-card rounded-2xl">
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, var(--color-morandi-sage), #8aab8e);">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+          </div>
+          <span class="font-medium text-morandi-text flex-1 min-w-0 text-[15px]">${title}</span>
+          <svg class="w-4 h-4 text-morandi-subtle flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
         </a>
       </li>
     `;
@@ -57,7 +61,7 @@ const { policies } = Astro.props;
     } else {
       listEl.classList.remove('hidden');
       emptyEl.classList.add('hidden');
-      listEl.innerHTML = filtered.map(renderItem).join('');
+      listEl.innerHTML = filtered.map((item, i) => renderItem(item, i)).join('');
     }
   }
 

@@ -4,7 +4,9 @@ import BookList from '../../components/BookList.astro';
 import books from '../../data/books.json';
 ---
 <BaseLayout title="经验分享 - 无碍e家" showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '经验分享' }]}>
-  <h1 class="text-2xl font-bold text-slate-800 mb-6">经验分享</h1>
-  <p class="text-slate-600 mb-6">无障碍改造相关书籍推荐</p>
+  <div class="mb-10 animate-spring-fade">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-2">经验分享</h1>
+    <p class="text-morandi-muted">无障碍改造相关书籍推荐</p>
+  </div>
   <BookList books={books} />
 </BaseLayout>

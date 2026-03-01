@@ -8,12 +8,12 @@ interface Props {
 }
 const { title, author, audience, summary, cover } = Astro.props;
 ---
-<article class="bg-white rounded-lg border border-slate-200 overflow-hidden flex">
-  <img src={cover} alt={title} class="w-24 h-32 sm:w-28 sm:h-36 object-cover bg-slate-100 flex-shrink-0" />
-  <div class="p-4 flex-1 min-w-0">
-    <h3 class="font-semibold text-slate-800">{title}</h3>
-    {author && author !== '未知' && <p class="mt-1 text-sm text-slate-600">作者：{author}</p>}
-    {audience && <p class="mt-1 text-sm text-slate-600">适用人群：{audience}</p>}
-    <p class="mt-2 text-sm text-slate-600" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{summary}</p>
+<article class="glass spring-card rounded-2xl overflow-hidden flex">
+  <img src={cover} alt={title} class="w-24 h-32 sm:w-28 sm:h-36 object-cover flex-shrink-0" style="background: linear-gradient(135deg, #e8e0da, #d6ccc4, #e2dbd5);" />
+  <div class="p-4 sm:p-5 flex-1 min-w-0">
+    <h3 class="font-semibold text-morandi-text text-[15px]">{title}</h3>
+    {author && author !== '未知' && <p class="mt-1 text-sm text-morandi-muted">作者：{author}</p>}
+    {audience && <p class="mt-1 text-sm text-morandi-muted">适用人群：{audience}</p>}
+    <p class="mt-2 text-sm text-morandi-subtle leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{summary}</p>
   </div>
 </article>

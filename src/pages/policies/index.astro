@@ -4,7 +4,9 @@ import PolicyList from '../../components/PolicyList.astro';
 import policies from '../../data/policies.json';
 ---
 <BaseLayout title="家居改造政策信息 - 无碍e家" showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '政策信息' }]}>
-  <h1 class="text-2xl font-bold text-slate-800 mb-6">家居改造政策信息</h1>
-  <p class="text-slate-600 mb-6">政策文件与法规 PDF 下载</p>
+  <div class="mb-10 animate-spring-fade">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-2">家居改造政策信息</h1>
+    <p class="text-morandi-muted">政策文件与法规 PDF 下载</p>
+  </div>
   <PolicyList policies={policies} />
 </BaseLayout>

@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import Search from 'astro-pagefind/components/Search';
 interface Props {
   title?: string;
   showBreadcrumb?: boolean;
@@ -21,43 +20,43 @@ const { title = '无碍e家', showBreadcrumb = false, breadcrumb = [] } = Astro.
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800">
+<body class="min-h-screen bg-morandi-bg text-morandi-text antialiased">
   <a href="#main" class="skip-link">跳过导航，直达主内容</a>
 
-  <header class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto flex items-center justify-between">
-      <a href="/" class="text-xl font-semibold text-blue-600 hover:text-blue-700">无碍e家</a>
-      <div class="flex items-center gap-4">
-      <div id="pagefind-search" class="hidden sm:block"><Search id="search-modal" className="pagefind-search-trigger" uiOptions={{ showSubResults: true }} /></div>
-      <nav class="hidden sm:flex gap-6" aria-label="主导航">
-        <a href="/products" class="text-slate-600 hover:text-blue-600">改造家居</a>
-        <a href="/policies" class="text-slate-600 hover:text-blue-600">政策</a>
-        <a href="/books" class="text-slate-600 hover:text-blue-600">经验分享</a>
-        <a href="/about" class="text-slate-600 hover:text-blue-600">关于我们</a>
-      </nav>
+  <!-- 玻璃拟态顶栏 -->
+  <header class="glass-strong sticky top-0 z-50 border-b border-morandi-border">
+    <div class="max-w-5xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between">
+      <a href="/" class="text-lg font-semibold tracking-tight text-morandi-text spring-btn inline-block">无碍e家</a>
+      <div class="flex items-center gap-5">
+        <nav class="hidden sm:flex gap-7" aria-label="主导航">
+          <a href="/products" class="text-sm text-morandi-muted hover:text-morandi-text transition-colors duration-300">改造家居</a>
+          <a href="/policies" class="text-sm text-morandi-muted hover:text-morandi-text transition-colors duration-300">政策</a>
+          <a href="/books" class="text-sm text-morandi-muted hover:text-morandi-text transition-colors duration-300">经验分享</a>
+          <a href="/about" class="text-sm text-morandi-muted hover:text-morandi-text transition-colors duration-300">关于我们</a>
+        </nav>
       </div>
-      <button type="button" id="mobile-menu-btn" class="sm:hidden p-2" aria-label="打开菜单" aria-expanded="false">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <button type="button" id="mobile-menu-btn" class="sm:hidden p-2 -mr-2 text-morandi-muted hover:text-morandi-text spring-btn" aria-label="打开菜单" aria-expanded="false">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
       </button>
     </div>
-    <div id="mobile-menu" class="hidden sm:hidden mt-4 pb-2 border-t border-slate-200 pt-4">
-      <div class="mb-4"><Search id="search-mobile" className="pagefind-search-trigger" uiOptions={{ showSubResults: true }} /></div>
-      <nav class="flex flex-col gap-2" aria-label="移动端导航">
-        <a href="/products" class="py-2 text-slate-600 hover:text-blue-600">改造家居</a>
-        <a href="/policies" class="py-2 text-slate-600 hover:text-blue-600">政策</a>
-        <a href="/books" class="py-2 text-slate-600 hover:text-blue-600">经验分享</a>
-        <a href="/about" class="py-2 text-slate-600 hover:text-blue-600">关于我们</a>
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="hidden sm:hidden border-t border-morandi-border px-5 py-5">
+      <nav class="flex flex-col gap-1" aria-label="移动端导航">
+        <a href="/products" class="py-2.5 text-sm text-morandi-muted hover:text-morandi-text transition-colors">改造家居</a>
+        <a href="/policies" class="py-2.5 text-sm text-morandi-muted hover:text-morandi-text transition-colors">政策</a>
+        <a href="/books" class="py-2.5 text-sm text-morandi-muted hover:text-morandi-text transition-colors">经验分享</a>
+        <a href="/about" class="py-2.5 text-sm text-morandi-muted hover:text-morandi-text transition-colors">关于我们</a>
       </nav>
     </div>
   </header>
 
-  <main id="main" class="max-w-5xl mx-auto px-6 py-8" tabindex="-1">
+  <main id="main" class="max-w-5xl mx-auto px-5 sm:px-8 py-10 sm:py-14" tabindex="-1">
     {showBreadcrumb && breadcrumb.length > 0 && (
-      <nav class="mb-6 text-sm text-slate-600" aria-label="面包屑">
+      <nav class="mb-8 text-sm text-morandi-subtle animate-spring-fade" aria-label="面包屑">
         {breadcrumb.map((item, i) => (
           <span>
-            {i > 0 && <span class="mx-2">/</span>}
-            {item.href ? <a href={item.href} class="hover:text-blue-600">{item.label}</a> : <span class="text-slate-800">{item.label}</span>}
+            {i > 0 && <span class="mx-2 text-morandi-subtle/50">/</span>}
+            {item.href ? <a href={item.href} class="hover:text-morandi-text transition-colors duration-300">{item.label}</a> : <span class="text-morandi-text">{item.label}</span>}
           </span>
         ))}
       </nav>
@@ -65,28 +64,33 @@ const { title = '无碍e家', showBreadcrumb = false, breadcrumb = [] } = Astro.
     <slot />
   </main>
 
-  <footer class="border-t border-slate-200 py-6 px-6 mt-12">
-    <div class="max-w-5xl mx-auto text-center">
-      <div class="flex flex-wrap justify-center gap-4 mb-4 text-sm">
-        <span class="text-slate-500">无障碍工具：</span>
-        <button type="button" id="font-small" class="px-2 py-1 rounded hover:bg-slate-100" aria-label="小号字体">A-</button>
-        <button type="button" id="font-medium" class="px-2 py-1 rounded hover:bg-slate-100 font-medium" aria-label="中号字体">A</button>
-        <button type="button" id="font-large" class="px-2 py-1 rounded hover:bg-slate-100" aria-label="大号字体">A+</button>
-        <button type="button" id="dark-toggle" class="px-2 py-1 rounded hover:bg-slate-100" aria-label="切换深色模式">🌓</button>
+  <!-- 玻璃拟态页脚 -->
+  <footer class="glass-subtle border-t border-morandi-border mt-16">
+    <div class="max-w-5xl mx-auto px-5 sm:px-8 py-10">
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 mb-6 text-sm">
+        <span class="text-morandi-subtle text-xs uppercase tracking-widest">无障碍</span>
+        <button type="button" id="font-small" class="px-2.5 py-1.5 rounded-lg text-morandi-muted hover:text-morandi-text spring-btn glass-subtle" aria-label="小号字体">A−</button>
+        <button type="button" id="font-medium" class="px-2.5 py-1.5 rounded-lg text-morandi-muted hover:text-morandi-text font-medium spring-btn glass-subtle" aria-label="中号字体">A</button>
+        <button type="button" id="font-large" class="px-2.5 py-1.5 rounded-lg text-morandi-muted hover:text-morandi-text spring-btn glass-subtle" aria-label="大号字体">A+</button>
+        <button type="button" id="dark-toggle" class="p-1.5 rounded-lg text-morandi-muted hover:text-morandi-text spring-btn glass-subtle" aria-label="切换深色模式">
+          <svg id="icon-moon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+          <svg id="icon-sun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
+        </button>
       </div>
-      <p class="text-slate-500 text-sm">无障碍家居改造信息平台</p>
-      <p class="mt-2 text-slate-400 text-xs">
-        <a href="/about" class="hover:text-slate-600">关于我们</a>
-        <span class="mx-2">|</span>
-        <a href="/faq" class="hover:text-slate-600">常见问题</a>
-        <span class="mx-2">|</span>
-        <a href="/feedback" class="hover:text-slate-600">意见反馈</a>
+      <p class="text-center text-morandi-subtle text-sm">无障碍家居改造信息平台</p>
+      <p class="mt-3 text-center text-morandi-subtle/60 text-xs">
+        <a href="/about" class="hover:text-morandi-text transition-colors duration-300">关于我们</a>
+        <span class="mx-2.5">·</span>
+        <a href="/faq" class="hover:text-morandi-text transition-colors duration-300">常见问题</a>
+        <span class="mx-2.5">·</span>
+        <a href="/feedback" class="hover:text-morandi-text transition-colors duration-300">意见反馈</a>
       </p>
     </div>
   </footer>
 
-  <button type="button" id="back-to-top" class="fixed bottom-8 right-8 p-3 rounded-full bg-blue-600 text-white shadow-lg opacity-0 pointer-events-none transition-opacity hover:bg-blue-700 focus:ring-2 focus:ring-blue-400" aria-label="返回顶部">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+  <!-- 返回顶部 -->
+  <button type="button" id="back-to-top" class="fixed bottom-6 right-6 p-2.5 rounded-2xl glass-strong text-morandi-text opacity-0 pointer-events-none spring-btn" aria-label="返回顶部" style="transition: opacity 0.4s var(--spring-smooth), transform 0.5s var(--spring-bounce);">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5"/></svg>
   </button>
 
   <script>
@@ -117,11 +121,22 @@ const { title = '无碍e家', showBreadcrumb = false, breadcrumb = [] } = Astro.
       setFontSize(localStorage.getItem('font-size') || 'medium');
 
       const darkToggle = document.getElementById('dark-toggle');
+      const iconMoon = document.getElementById('icon-moon');
+      const iconSun = document.getElementById('icon-sun');
+      function updateDarkIcons() {
+        const isDark = document.documentElement.classList.contains('dark');
+        iconMoon?.classList.toggle('hidden', isDark);
+        iconSun?.classList.toggle('hidden', !isDark);
+      }
       darkToggle?.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
         localStorage.setItem('dark-mode', document.documentElement.classList.contains('dark'));
+        updateDarkIcons();
       });
-      if (localStorage.getItem('dark-mode') === 'true') document.documentElement.classList.add('dark');
+      if (localStorage.getItem('dark-mode') === 'true') {
+        document.documentElement.classList.add('dark');
+      }
+      updateDarkIcons();
 
       const backBtn = document.getElementById('back-to-top');
       if (backBtn) {

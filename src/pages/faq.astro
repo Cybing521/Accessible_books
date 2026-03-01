@@ -3,24 +3,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const faqs = [
   { q: '如何搜索适合的改造产品？', a: '在改造家居页面，可使用顶部搜索框按产品名称、适用场所、适用人群搜索，也可通过「分类」筛选肢体类/视障类/听障类，或通过「场所」下拉选择厨房、卫生间等具体空间。' },
-  { q: '政策 PDF 如何下载？', a: '进入「家居改造政策信息」页面，点击任意政策标题旁的「→ 打开 PDF」链接，将在新标签页打开或下载该 PDF 文件。' },
+  { q: '政策 PDF 如何下载？', a: '进入「家居改造政策信息」页面，点击任意政策标题旁的链接，将在新标签页打开或下载该 PDF 文件。' },
   { q: '书籍推荐是购买链接吗？', a: '当前页面仅提供书籍简介与适用人群说明，暂不提供购买链接。您可根据书名在各大购书平台自行搜索。' },
-  { q: '网站支持哪些无障碍功能？', a: '我们提供字体大小调节（页脚 A- / A / A+）、深色模式、跳过导航链接、键盘导航支持，以及符合 WCAG 基础规范的页面结构。' },
+  { q: '网站支持哪些无障碍功能？', a: '我们提供字体大小调节、深色模式、跳过导航链接、键盘导航支持，以及符合 WCAG 基础规范的页面结构。' },
   { q: '如何反馈问题或建议？', a: 'feedback' },
 ];
 ---
 <BaseLayout title="常见问题 - 无碍e家">
-  <h1 class="text-2xl font-bold text-slate-800 mb-6">常见问题</h1>
-  <div class="space-y-6">
+  <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-10 animate-spring-fade">常见问题</h1>
+  <div class="space-y-4">
     {faqs.map((faq, i) => (
-      <section class="bg-white rounded-lg border border-slate-200 p-6">
-        <h2 class="font-semibold text-slate-800 mb-2">Q{i + 1}. {faq.q}</h2>
+      <section class={`glass spring-card rounded-2xl p-6 animate-spring-in stagger-${i + 1}`}>
+        <h2 class="font-semibold text-morandi-text mb-2 text-[15px]">Q{i + 1}. {faq.q}</h2>
         {faq.a === 'feedback' ? (
-          <p class="text-slate-600 leading-relaxed">
-            请访问 <a href="/feedback" class="text-blue-600 hover:underline">意见反馈</a> 页面，填写表单提交您的问题或建议。
+          <p class="text-morandi-muted leading-relaxed text-[15px]">
+            请访问 <a href="/feedback" class="text-morandi-text underline decoration-morandi-subtle/40 hover:decoration-morandi-text transition-colors duration-300">意见反馈</a> 页面，填写表单提交您的问题或建议。
           </p>
         ) : (
-          <p class="text-slate-600 leading-relaxed">{faq.a}</p>
+          <p class="text-morandi-muted leading-relaxed text-[15px]">{faq.a}</p>
         )}
       </section>
     ))}

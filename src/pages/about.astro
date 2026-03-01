@@ -2,24 +2,33 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="关于我们 - 无碍e家">
-  <h1 class="text-2xl font-bold text-slate-800 mb-6">关于我们</h1>
-  <div class="prose prose-slate max-w-none">
-    <p class="text-slate-600 leading-relaxed mb-4">
-      无碍e家是一个面向残障人士、老年人及其家庭的<strong>无障碍家居改造信息平台</strong>。
+  <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-10 animate-spring-fade">关于我们</h1>
+  <div class="glass-strong rounded-2xl p-6 sm:p-10 animate-spring-in">
+    <p class="text-morandi-muted leading-relaxed mb-6">
+      无碍e家是一个面向残障人士、老年人及其家庭的<strong class="text-morandi-text">无障碍家居改造信息平台</strong>。
     </p>
-    <h2 class="text-lg font-semibold text-slate-800 mt-6 mb-2">我们的目标</h2>
-    <p class="text-slate-600 leading-relaxed mb-4">
+    <h2 class="text-base font-semibold text-morandi-text mt-8 mb-3">我们的目标</h2>
+    <p class="text-morandi-muted leading-relaxed mb-6">
       帮助有需要的家庭了解无障碍家居改造产品、相关政策法规及实践经验，助力实现安全、自主、有尊严的居家生活。
     </p>
-    <h2 class="text-lg font-semibold text-slate-800 mt-6 mb-2">网站内容</h2>
-    <ul class="list-disc list-inside text-slate-600 space-y-2 mb-4">
-      <li><strong>改造家居</strong>：肢体类、视障类、听障类无障碍产品，支持按分类、场所、关键词搜索</li>
-      <li><strong>政策信息</strong>：国家及地方无障碍改造相关政策 PDF 下载</li>
-      <li><strong>经验分享</strong>：无障碍家居与照护相关书籍推荐</li>
+    <h2 class="text-base font-semibold text-morandi-text mt-8 mb-3">网站内容</h2>
+    <ul class="text-morandi-muted space-y-3 mb-6">
+      <li class="flex gap-3 items-start">
+        <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--color-morandi-clay);"></span>
+        <span><strong class="text-morandi-text">改造家居</strong>：肢体类、视障类、听障类无障碍产品，支持按分类、场所、关键词搜索</span>
+      </li>
+      <li class="flex gap-3 items-start">
+        <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--color-morandi-sage);"></span>
+        <span><strong class="text-morandi-text">政策信息</strong>：国家及地方无障碍改造相关政策 PDF 下载</span>
+      </li>
+      <li class="flex gap-3 items-start">
+        <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--color-morandi-lavender);"></span>
+        <span><strong class="text-morandi-text">经验分享</strong>：无障碍家居与照护相关书籍推荐</span>
+      </li>
     </ul>
-    <h2 class="text-lg font-semibold text-slate-800 mt-6 mb-2">联系方式</h2>
-    <p class="text-slate-600 leading-relaxed">
-      如有建议或合作意向，请通过<a href="/feedback" class="text-blue-600 hover:underline">意见反馈</a>页面与我们联系。
+    <h2 class="text-base font-semibold text-morandi-text mt-8 mb-3">联系方式</h2>
+    <p class="text-morandi-muted leading-relaxed">
+      如有建议或合作意向，请通过<a href="/feedback" class="text-morandi-text underline decoration-morandi-subtle/40 hover:decoration-morandi-text transition-colors duration-300">意见反馈</a>页面与我们联系。
     </p>
   </div>
 </BaseLayout>
