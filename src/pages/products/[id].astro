@@ -15,7 +15,7 @@ const imageSrc = product.image?.includes('placeholder') ? PLACEHOLDER_IMG : prod
 ---
 <BaseLayout title={`${product.name} - 改造家居 - 无碍e家`} showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '改造家居', href: '/products' }, { label: product.name }]}>
   <article class="glass-strong rounded-2xl overflow-hidden animate-spring-in">
-    <img src={imageSrc} alt={product.name} class="w-full max-w-3xl mx-auto h-64 sm:h-80 object-cover" style="background: linear-gradient(135deg, #e8e0da, #d6ccc4, #e2dbd5);" />
+    <img src={imageSrc} alt={product.name} class="w-full max-w-3xl mx-auto h-72 sm:h-96 object-contain p-4" style="background: linear-gradient(135deg, #f5f0ec, #ede6e0, #f0ebe6);" />
     <div class="p-6 sm:p-10">
       <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-6">{product.name}</h1>
       <dl class="space-y-3 text-morandi-muted text-[15px]">

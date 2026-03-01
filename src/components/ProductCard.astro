@@ -9,7 +9,7 @@ interface Props {
 const { name, venue, audience, material, image } = Astro.props;
 ---
 <article class="glass spring-card rounded-2xl overflow-hidden">
-  <img src={image} alt={name} class="w-full h-44 object-cover" style="background: linear-gradient(135deg, #e8e0da, #d6ccc4, #e2dbd5);" />
+  <img src={image} alt={name} class="w-full h-48 object-contain p-2" style="background: linear-gradient(135deg, #f5f0ec, #ede6e0, #f0ebe6);" />
   <div class="p-5">
     <h3 class="font-semibold text-morandi-text text-[15px]">{name}</h3>
     <p class="mt-2 text-sm text-morandi-muted"><span class="text-morandi-subtle">适用场所：</span>{venue || '—'}</p>
