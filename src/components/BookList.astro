@@ -16,6 +16,7 @@ const { books } = Astro.props;
 
 <script define:vars={{ books }}>
   const PER_PAGE = 12;
+  const PLACEHOLDER_IMG = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280"><rect width="200" height="280" rx="4" fill="#e2e8f0"/><rect x="20" y="30" width="160" height="220" rx="2" fill="#f1f5f9"/><line x1="100" y1="50" x2="100" y2="230" stroke="#94a3b8" stroke-width="1"/><text x="100" y="140" text-anchor="middle" fill="#64748b" font-size="14" font-family="serif">书</text></svg>');
   const listEl = document.getElementById('book-list');
   const paginationEl = document.getElementById('book-pagination');
 
@@ -24,18 +25,22 @@ const { books } = Astro.props;
     div.textContent = s;
     return div.innerHTML;
   }
+  function getCoverSrc(src) {
+    if (!src || src.includes('placeholder')) return PLACEHOLDER_IMG;
+    return src.startsWith('/') ? window.location.origin + src : src;
+  }
 
   function renderCard(b) {
     const title = escapeHtml(b.title);
     const author = escapeHtml(b.author || '');
     const audience = escapeHtml(b.audience || '');
     const summary = escapeHtml((b.summary || '').slice(0, 120) + ((b.summary || '').length > 120 ? '…' : ''));
-    const cover = escapeHtml(b.cover);
+    const cover = getCoverSrc(b.cover);
     const authorLine = author && author !== '未知' ? `<p class="mt-1 text-sm text-slate-600">作者：${author}</p>` : '';
     const audienceLine = audience ? `<p class="mt-1 text-sm text-slate-600">适用人群：${audience}</p>` : '';
     return `
       <article class="bg-white rounded-lg border border-slate-200 overflow-hidden flex">
-        <img src="${cover}" alt="${title}" class="w-24 h-32 sm:w-28 sm:h-36 object-cover bg-slate-100 flex-shrink-0" />
+        <img src="${cover}" alt="${title}" class="w-24 h-32 sm:w-28 sm:h-36 object-cover bg-slate-100 flex-shrink-0" loading="lazy" />
         <div class="p-4 flex-1 min-w-0">
           <h3 class="font-semibold text-slate-800">${title}</h3>
           ${authorLine}
