@@ -1,4 +1,4 @@
-# Astro Starter Kit: Minimal
+![1772376732070](image/README/1772376732070.png)![1772376733878](image/README/1772376733878.png)# Astro Starter Kit: Minimal
 
 ```sh
 npm create astro@latest -- --template minimal

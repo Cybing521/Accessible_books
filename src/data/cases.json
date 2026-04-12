@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "name": "肢体类卧室",
+    "category": "肢体类",
+    "description": "房间四周均有符合使用者高度的扶手，可升降书桌配备可固定轮滑，可前后移动，调整位置，书架设置高度符合需求尺寸，窗户增加电动或自动开关机制，方便便捷。房间内共设置四处紧急呼叫按钮，保证必要时刻可触及。",
+    "images": ["/images/cases/肢体类卧室/1.png", "/images/cases/肢体类卧室/2.png", "/images/cases/肢体类卧室/3.png", "/images/cases/肢体类卧室/4.png", "/images/cases/肢体类卧室/5.png", "/images/cases/肢体类卧室/6.png"]
+  },
+  {
+    "id": "2",
+    "name": "肢体类浴室",
+    "category": "肢体类",
+    "description": "浴室门大于轮椅宽度，且采用按钮自动横向开门，浴室四面设计高低不同的扶手以及紧急呼叫按钮共六处，保证在突发情况下可触及。马桶侧面设置扶手。洗漱台可升降设计，沐浴处使用防水隔帘，且配备辅助洗澡椅。",
+    "images": ["/images/cases/肢体类浴室/1.png", "/images/cases/肢体类浴室/2.png", "/images/cases/肢体类浴室/3.png", "/images/cases/肢体类浴室/4.png", "/images/cases/肢体类浴室/5.png", "/images/cases/肢体类浴室/6.png"]
+  },
+  {
+    "id": "3",
+    "name": "视障类厨房",
+    "category": "视障类",
+    "description": "使用电磁炉代替明火，降低安全风险。餐具厨具在把柄处和放置处均有盲文提示，且分开独立放置，减少移动物品的放置位置。按钮类的增加盲文提示，屋内设置烟雾报警器。",
+    "images": ["/images/cases/视障类厨房/1.png", "/images/cases/视障类厨房/2.png", "/images/cases/视障类厨房/3.png", "/images/cases/视障类厨房/4.png", "/images/cases/视障类厨房/5.png", "/images/cases/视障类厨房/6.png"]
+  },
+  {
+    "id": "4",
+    "name": "视障类玄关",
+    "category": "视障类",
+    "description": "玄关柜子的置物台分格分区，使用盲文标记日常放置物品，柜子高度符合人体使用尺寸，玄关椅与鞋架相邻，方便拿取。",
+    "images": ["/images/cases/视障类玄关/1.png", "/images/cases/视障类玄关/2.png"]
+  }
+]

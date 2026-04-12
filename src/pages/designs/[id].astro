@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import designs from '../../data/designs.json';
+
+export function getStaticPaths() {
+  return designs.map((d) => ({ params: { id: d.id }, props: { design: d } }));
+}
+const { design } = Astro.props;
+---
+<BaseLayout title={`${design.name} - 产品设计 - 无碍e家`} showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '产品设计', href: '/designs' }, { label: design.name }]}>
+  <article class="animate-spring-fade">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-6">{design.name}</h1>
+
+    <div class="grid gap-4 sm:grid-cols-2 mb-8">
+      {design.images.map((img: string) => (
+        <div class="glass rounded-2xl overflow-hidden">
+          <img src={img} alt={design.name} class="w-full h-64 object-contain p-3" loading="lazy" style="background: linear-gradient(135deg, #f5f0ec, #ede6e0, #f0ebe6);" />
+        </div>
+      ))}
+    </div>
+
+    <section class="glass rounded-2xl p-6 sm:p-8 mb-6">
+      <h2 class="text-lg font-semibold text-morandi-text mb-3">设计理念</h2>
+      <p class="text-sm text-morandi-muted leading-relaxed">{design.concept}</p>
+    </section>
+
+    <section class="glass rounded-2xl p-6 sm:p-8">
+      <h2 class="text-lg font-semibold text-morandi-text mb-3">使用说明</h2>
+      <div class="text-sm text-morandi-muted leading-relaxed whitespace-pre-line">{design.usage}</div>
+    </section>
+
+    <div class="mt-8">
+      <a href="/designs" class="inline-flex items-center gap-2 text-sm text-morandi-muted hover:text-morandi-text spring-btn transition-colors duration-300">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+        返回产品设计
+      </a>
+    </div>
+  </article>
+</BaseLayout>

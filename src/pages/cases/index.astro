@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import cases from '../../data/cases.json';
+---
+<BaseLayout title="整装案例设计 - 无碍e家" showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '整装案例设计' }]}>
+  <div class="mb-10 animate-spring-fade">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-2">整装案例设计</h1>
+    <p class="text-morandi-muted">无障碍整装空间设计方案</p>
+  </div>
+  <div class="grid gap-6 sm:grid-cols-2">
+    {cases.map((c, i) => (
+      <a href={`/cases/${c.id}`} class="block glass spring-card rounded-2xl overflow-hidden animate-spring-in" style={`animation-delay: ${Math.min(i * 0.05, 0.3)}s`}>
+        <img src={c.images[0]} alt={c.name} class="w-full h-56 object-cover" loading="lazy" style="background: linear-gradient(135deg, #f5f0ec, #ede6e0, #f0ebe6);" />
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-lg text-xs glass-strong text-morandi-muted">{c.category}</span>
+            <h3 class="font-semibold text-morandi-text text-[15px]">{c.name}</h3>
+          </div>
+          <p class="text-sm text-morandi-subtle leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{c.description}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
