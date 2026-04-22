@@ -2,9 +2,56 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="无碍e家 - 无障碍家居改造信息平台">
-  <div class="mb-14 sm:mb-20 animate-spring-fade">
-    <h1 class="text-3xl sm:text-4xl font-semibold text-morandi-text tracking-tight mb-3">无碍e家</h1>
-    <p class="text-morandi-muted text-base sm:text-lg max-w-lg leading-relaxed">了解更多无障碍家居改造信息</p>
+  <section class="hero-cover glass-strong animate-spring-in">
+    <div class="hero-cover__media" aria-hidden="true">
+      <img
+        src="/images/home/cover-space-scene.jpg"
+        alt=""
+        class="hero-cover__bg"
+        loading="eager"
+        decoding="async"
+      />
+      <div class="hero-cover__veil"></div>
+      <div class="hero-cover__glow"></div>
+    </div>
+
+    <div class="hero-cover__content">
+      <div class="hero-cover__copy animate-spring-fade">
+        <p class="hero-cover__eyebrow">居家适老化与无障碍改造信息平台</p>
+        <h1 class="hero-cover__title">无碍e家</h1>
+        <p class="hero-cover__lede">
+          把居家改造、辅助产品、整装案例、政策文件和经验资料放在同一个入口，
+          帮助更快找到适合老年人与残障人群的生活支持方案。
+        </p>
+        <div class="hero-cover__actions">
+          <a href="/products" class="hero-cover__button hero-cover__button--primary spring-btn">浏览改造家居</a>
+          <a href="/policies" class="hero-cover__button hero-cover__button--secondary spring-btn">查看政策依据</a>
+        </div>
+      </div>
+
+      <div class="hero-cover__focus animate-spring-in stagger-2">
+        <div class="hero-cover__focus-card glass">
+          <img
+            src="/images/home/cover-heart-wordcloud.jpg"
+            alt="以适老化改造、无障碍改造、养老与居家适配为关键词的心形词云"
+            class="hero-cover__focus-image"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <p class="hero-cover__focus-note">
+          关键词聚焦：适老化、无障碍、居家改造、养老服务、社区支持。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="hero-section-intro animate-spring-fade">
+    <p class="hero-section-intro__label">平台内容</p>
+    <h2 class="hero-section-intro__title">从信息检索到方案参考，按主题快速进入</h2>
+    <p class="hero-section-intro__text">
+      你可以从现成产品入手，也可以先看整装案例、原创设计方案与政策文件，再回到具体的改造决策。
+    </p>
   </div>
 
   <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">

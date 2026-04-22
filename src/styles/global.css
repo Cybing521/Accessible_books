@@ -142,6 +142,218 @@ html.text-size-large { font-size: 18px; }
   justify-content: center;
 }
 
+/* 首页封面 */
+.hero-cover {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 2rem;
+  min-height: clamp(32rem, 88vw, 44rem);
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  box-shadow:
+    0 18px 48px rgba(74, 67, 64, 0.1),
+    0 0 0 1px rgba(180, 167, 161, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.hero-cover__media,
+.hero-cover__veil,
+.hero-cover__glow {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-cover__bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.04);
+  filter: saturate(0.84) brightness(1.04);
+}
+
+.hero-cover__veil {
+  background:
+    linear-gradient(110deg, rgba(247, 243, 237, 0.94) 0%, rgba(247, 243, 237, 0.82) 34%, rgba(247, 243, 237, 0.22) 72%, rgba(247, 243, 237, 0.58) 100%),
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 34%);
+}
+
+.hero-cover__glow {
+  background:
+    radial-gradient(circle at 82% 22%, rgba(196, 166, 160, 0.34) 0%, transparent 28%),
+    radial-gradient(circle at 72% 78%, rgba(163, 181, 166, 0.22) 0%, transparent 24%);
+  mix-blend-mode: multiply;
+}
+
+.hero-cover__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-items: end;
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+  min-height: inherit;
+  padding: clamp(1.5rem, 4vw, 2rem);
+}
+
+.hero-cover__copy {
+  max-width: 38rem;
+}
+
+.hero-cover__eyebrow {
+  margin: 0 0 0.9rem;
+  color: #8f7463;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hero-cover__title {
+  margin: 0;
+  color: #523a2f;
+  font-size: clamp(2.9rem, 7vw, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.06em;
+  text-wrap: balance;
+}
+
+.hero-cover__lede {
+  margin: 1.25rem 0 0;
+  max-width: 34rem;
+  color: #6a5750;
+  font-size: clamp(1rem, 1.8vw, 1.14rem);
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+
+.hero-cover__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 1.6rem;
+}
+
+.hero-cover__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero-cover__button--primary {
+  color: #f8f3ef;
+  background: linear-gradient(135deg, #9f6b45, #7d5135);
+  box-shadow: 0 12px 28px rgba(125, 81, 53, 0.22);
+}
+
+.hero-cover__button--secondary {
+  color: #5a4b45;
+  background: rgba(255, 250, 246, 0.76);
+  border: 1px solid rgba(125, 81, 53, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.hero-cover__focus {
+  justify-self: end;
+  width: min(100%, 20rem);
+}
+
+.hero-cover__focus-card {
+  padding: 1rem;
+  border-radius: 1.75rem;
+  transform: rotate(5deg);
+  box-shadow:
+    0 16px 40px rgba(74, 67, 64, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.hero-cover__focus-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 1.2rem;
+}
+
+.hero-cover__focus-note {
+  margin: 1rem 0 0;
+  padding-left: 0.4rem;
+  color: #6a5750;
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+.hero-section-intro {
+  margin-bottom: 1.6rem;
+}
+
+.hero-section-intro__label {
+  margin: 0 0 0.5rem;
+  color: #8f7463;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hero-section-intro__title {
+  margin: 0;
+  color: var(--color-morandi-text);
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.hero-section-intro__text {
+  max-width: 42rem;
+  margin: 0.8rem 0 0;
+  color: var(--color-morandi-muted);
+  line-height: 1.9;
+}
+
+@media (min-width: 900px) {
+  .hero-cover__content {
+    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.78fr);
+    padding: clamp(2rem, 4vw, 2.8rem);
+  }
+}
+
+@media (max-width: 899px) {
+  .hero-cover__veil {
+    background:
+      linear-gradient(180deg, rgba(247, 243, 237, 0.84) 0%, rgba(247, 243, 237, 0.78) 52%, rgba(247, 243, 237, 0.92) 100%),
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.68) 0%, transparent 28%);
+  }
+
+  .hero-cover__bg {
+    object-position: 62% center;
+  }
+
+  .hero-cover__focus {
+    justify-self: start;
+    width: min(100%, 16rem);
+  }
+
+  .hero-cover__focus-card {
+    transform: rotate(3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cover__bg,
+  .hero-cover__focus-card {
+    transform: none;
+  }
+}
+
 /* ============================================
    深色模式 - 莫兰蒂暗调
    ============================================ */
@@ -188,6 +400,58 @@ html.dark input, html.dark select {
 }
 html.dark .placeholder-img {
   background: linear-gradient(135deg, #2a2724 0%, #332f2b 50%, #2a2724 100%);
+}
+
+html.dark .hero-cover {
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+html.dark .hero-cover__bg {
+  filter: saturate(0.76) brightness(0.7);
+}
+
+html.dark .hero-cover__veil {
+  background:
+    linear-gradient(110deg, rgba(32, 28, 25, 0.92) 0%, rgba(32, 28, 25, 0.78) 34%, rgba(32, 28, 25, 0.26) 72%, rgba(32, 28, 25, 0.58) 100%),
+    radial-gradient(circle at 20% 20%, rgba(88, 68, 57, 0.34) 0%, transparent 28%);
+}
+
+html.dark .hero-cover__glow {
+  opacity: 0.9;
+}
+
+html.dark .hero-cover__eyebrow,
+html.dark .hero-section-intro__label {
+  color: #c3a796;
+}
+
+html.dark .hero-cover__title {
+  color: #f0dfd4;
+}
+
+html.dark .hero-cover__lede,
+html.dark .hero-cover__focus-note,
+html.dark .hero-section-intro__text {
+  color: #c6b5ab;
+}
+
+html.dark .hero-cover__button--primary {
+  color: #1f1b19;
+  background: linear-gradient(135deg, #deb699, #c6916a);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+html.dark .hero-cover__button--secondary {
+  color: #f0dfd4;
+  background: rgba(42, 39, 36, 0.7);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .hero-cover__focus-image {
+  background: rgba(255, 250, 245, 0.94);
 }
 
 /* 跳过链接 */
