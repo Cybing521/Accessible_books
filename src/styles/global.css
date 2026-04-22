@@ -294,47 +294,6 @@ html.text-size-large { font-size: 18px; }
   gap: 1rem;
 }
 
-.hero-cover__mini-card {
-  width: min(100%, 19rem);
-  padding: 1rem 1.05rem;
-  border-radius: 1.4rem;
-  box-shadow:
-    0 14px 30px rgba(74, 67, 64, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42);
-}
-
-.hero-cover__mini-card--top {
-  justify-self: start;
-}
-
-.hero-cover__mini-card--bottom {
-  justify-self: end;
-}
-
-.hero-cover__mini-label {
-  margin: 0;
-  color: #8f7463;
-  font-size: 0.76rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.hero-cover__mini-value {
-  margin: 0.55rem 0 0;
-  color: #4f3f39;
-  font-size: 1.08rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.hero-cover__mini-text {
-  margin: 0.55rem 0 0;
-  color: #75665f;
-  font-size: 0.92rem;
-  line-height: 1.65;
-}
-
 .hero-cover__focus {
   position: relative;
   justify-self: center;
@@ -382,41 +341,7 @@ html.text-size-large { font-size: 18px; }
 
 .home-journey {
   display: grid;
-  gap: 1.15rem;
   margin-bottom: clamp(2.4rem, 5vw, 3.5rem);
-}
-
-.home-journey__intro {
-  padding: clamp(1.2rem, 2.5vw, 1.6rem);
-  border-radius: 1.7rem;
-}
-
-.home-journey__label,
-.entry-deck__label {
-  margin: 0 0 0.5rem;
-  color: #8f7463;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.home-journey__title,
-.entry-deck__title {
-  margin: 0;
-  color: var(--color-morandi-text);
-  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
-  line-height: 1.15;
-  letter-spacing: -0.04em;
-  text-wrap: balance;
-}
-
-.home-journey__text,
-.entry-deck__text {
-  max-width: 42rem;
-  margin: 0.8rem 0 0;
-  color: var(--color-morandi-muted);
-  line-height: 1.9;
 }
 
 .home-journey__grid {
@@ -486,10 +411,6 @@ html.text-size-large { font-size: 18px; }
   color: #6d564c;
   font-size: 0.92rem;
   font-weight: 600;
-}
-
-.entry-deck__header {
-  margin-bottom: 1.4rem;
 }
 
 .entry-deck__grid {
@@ -680,7 +601,6 @@ html.text-size-large { font-size: 18px; }
     justify-items: start;
   }
 
-  .hero-cover__mini-card,
   .hero-cover__focus {
     justify-self: start;
   }
@@ -779,8 +699,6 @@ html.dark .hero-cover__glow {
 }
 
 html.dark .hero-cover__copy-panel,
-html.dark .hero-cover__mini-card,
-html.dark .home-journey__intro,
 html.dark .home-journey__card,
 html.dark .entry-card__content {
   background: rgba(34, 30, 28, 0.72);
@@ -798,10 +716,7 @@ html.dark .entry-card::after {
   background: linear-gradient(180deg, rgba(61, 53, 49, 0.6), rgba(28, 24, 22, 0.38));
 }
 
-html.dark .hero-cover__eyebrow,
-html.dark .hero-cover__mini-label,
-html.dark .home-journey__label,
-html.dark .entry-deck__label {
+html.dark .hero-cover__eyebrow {
   color: #c3a796;
 }
 
@@ -810,11 +725,8 @@ html.dark .hero-cover__title {
 }
 
 html.dark .hero-cover__lede,
-html.dark .hero-cover__mini-text,
 html.dark .hero-cover__focus-note,
-html.dark .home-journey__text,
 html.dark .home-journey__card-text,
-html.dark .entry-deck__text,
 html.dark .entry-card__text {
   color: #c6b5ab;
 }
@@ -840,12 +752,6 @@ html.dark .hero-cover__button--secondary {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-html.dark .home-journey__title,
-html.dark .entry-deck__title {
-  color: #f0dfd4;
-}
-
-html.dark .hero-cover__mini-value,
 html.dark .home-journey__card-title,
 html.dark .entry-card__title {
   color: #f0dfd4;
