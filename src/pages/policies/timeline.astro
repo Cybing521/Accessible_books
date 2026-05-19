@@ -22,10 +22,24 @@ const keywordPool: Record<string, string[]> = {
   "2026": ["实施方案","超额完成","十四五收官","民生实事","片区改造","系统推进","无障碍设施"]
 };
 
-const yearKeywords = sortedYears.map(y => ({
+const barColors = [
+  ['#c4a6a0','#b8918a'],
+  ['#b8a99a','#a89880'],
+  ['#a3b5a6','#8aab8e'],
+  ['#b0a8ba','#9e94ac'],
+  ['#c4a6a0','#b8918a'],
+  ['#a3937e','#8f7e68'],
+  ['#a3b5a6','#7a9e80'],
+  ['#b0a8ba','#9484a4'],
+];
+
+const totalDocs = policies.length;
+
+const yearKeywords = sortedYears.map((y, i) => ({
   year: y,
   count: yearGroups[y].length,
-  keywords: keywordPool[String(y)] || []
+  keywords: keywordPool[String(y)] || [],
+  color: barColors[i % barColors.length],
 }));
 ---
 <BaseLayout title="时间线与关键词可视化 - 共享信息库 - 无碍e家" showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '共享信息库', href: '/policies' }, { label: '时间线可视化' }]}>
@@ -34,10 +48,102 @@ const yearKeywords = sortedYears.map(y => ({
     <p class="text-morandi-muted">按年份展示政策发布趋势与高频关键词</p>
   </div>
 
-  <!-- 年度文件数量柱状图 -->
-  <section class="glass rounded-2xl p-6 sm:p-8 mb-10 animate-spring-in">
-    <h2 class="text-lg font-semibold text-morandi-text mb-6">年度发文趋势</h2>
-    <div class="timeline-chart" id="timeline-chart" role="img" aria-label="年度发文数量柱状图"></div>
+  <!-- 统计概览卡片 -->
+  <div class="stat-row animate-spring-in">
+    <div class="stat-card glass">
+      <div class="stat-ring" style="--ring-color: var(--color-morandi-sage)">
+        <svg viewBox="0 0 36 36" class="stat-ring-svg">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.12"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--ring-color)" stroke-width="2.5"
+            stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"
+            class="stat-ring-fill" style="--ring-target: 0"/>
+        </svg>
+        <span class="stat-ring-num" data-count={totalDocs}>0</span>
+      </div>
+      <div>
+        <div class="stat-label">文件总量</div>
+        <div class="stat-value">{totalDocs} 篇</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-ring" style="--ring-color: var(--color-morandi-rose)">
+        <svg viewBox="0 0 36 36" class="stat-ring-svg">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.12"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--ring-color)" stroke-width="2.5"
+            stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"
+            class="stat-ring-fill" style="--ring-target: 0"/>
+        </svg>
+        <span class="stat-ring-num" data-count={sortedYears.length}>0</span>
+      </div>
+      <div>
+        <div class="stat-label">跨越年份</div>
+        <div class="stat-value">{sortedYears[0]}–{sortedYears[sortedYears.length - 1]}</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-ring" style="--ring-color: var(--color-morandi-lavender)">
+        <svg viewBox="0 0 36 36" class="stat-ring-svg">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.12"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--ring-color)" stroke-width="2.5"
+            stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"
+            class="stat-ring-fill" style="--ring-target: 0"/>
+        </svg>
+        <span class="stat-ring-num" data-count={Math.max(...yearKeywords.map(y => y.count))}>0</span>
+      </div>
+      <div>
+        <div class="stat-label">年度峰值</div>
+        <div class="stat-value">{yearKeywords.reduce((a, b) => a.count > b.count ? a : b).year} 年</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 年度发文趋势图 -->
+  <section class="chart-section glass rounded-2xl mb-10 animate-spring-in stagger-2">
+    <div class="chart-header">
+      <h2 class="text-lg font-semibold text-morandi-text">年度发文趋势</h2>
+      <div class="chart-legend">
+        <span class="chart-legend-dot" style="background: var(--color-morandi-sage)"></span>
+        <span class="text-xs text-morandi-muted">文件数量</span>
+      </div>
+    </div>
+
+    <div class="chart-canvas">
+      <!-- 背景水平参考线 -->
+      <div class="chart-grid" aria-hidden="true">
+        <div class="chart-gridline" style="--line-y: 0%"><span class="chart-gridline-label">0</span></div>
+        <div class="chart-gridline" style="--line-y: 50%"><span class="chart-gridline-label" id="grid-mid"></span></div>
+        <div class="chart-gridline" style="--line-y: 100%"><span class="chart-gridline-label" id="grid-max"></span></div>
+      </div>
+
+      <!-- 面积填充层 -->
+      <svg class="chart-area-svg" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="area-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--color-morandi-sage)" stop-opacity="0.28"/>
+            <stop offset="100%" stop-color="var(--color-morandi-sage)" stop-opacity="0.02"/>
+          </linearGradient>
+        </defs>
+        <path id="area-path" fill="url(#area-grad)" d="" class="chart-area-path"/>
+        <path id="line-path" fill="none" stroke="var(--color-morandi-sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="" class="chart-line-path"/>
+      </svg>
+
+      <!-- 柱状图 -->
+      <div class="chart-bars" id="chart-bars"></div>
+    </div>
+
+    <!-- Tooltip -->
+    <div id="chart-tooltip" class="chart-tooltip glass-strong" style="display:none">
+      <div class="chart-tooltip-year"></div>
+      <div class="chart-tooltip-count"></div>
+      <div class="chart-tooltip-kws"></div>
+    </div>
+  </section>
+
+  <!-- 关键词气泡云 -->
+  <section class="glass rounded-2xl p-6 sm:p-8 mb-10 animate-spring-in stagger-3">
+    <h2 class="text-lg font-semibold text-morandi-text mb-2">高频关键词云</h2>
+    <p class="text-sm text-morandi-subtle mb-5">词汇大小反映出现频率，悬浮查看关联年份</p>
+    <div class="kw-cloud" id="kw-cloud"></div>
   </section>
 
   <!-- 时间线 -->
@@ -46,18 +152,17 @@ const yearKeywords = sortedYears.map(y => ({
     {sortedYears.map((year, yi) => {
       const items = yearGroups[year];
       const kws = keywordPool[String(year)] || [];
-      const isEven = yi % 2 === 0;
       return (
-        <div class={`timeline-node animate-spring-in`} style={`animation-delay: ${Math.min(yi * 0.08, 0.5)}s`} data-year={year}>
+        <div class="timeline-node animate-spring-in" style={`animation-delay: ${Math.min(yi * 0.08, 0.5)}s`} data-year={year}>
           <div class="timeline-dot-wrap">
-            <div class="timeline-dot"></div>
+            <div class="timeline-dot" style={`background: linear-gradient(135deg, ${barColors[yi % barColors.length][0]}, ${barColors[yi % barColors.length][1]}); box-shadow: 0 0 0 3px var(--color-morandi-bg), 0 0 0 5px ${barColors[yi % barColors.length][0]};`}></div>
             <span class="timeline-year-label">{year}</span>
           </div>
 
           <div class="timeline-card glass spring-card rounded-2xl p-5">
             <div class="flex items-center gap-3 mb-3">
               <span class="text-xl font-bold text-morandi-text">{year}</span>
-              <span class="px-2.5 py-0.5 rounded-lg text-xs glass-strong text-morandi-muted">{items.length} 篇</span>
+              <span class="px-2.5 py-0.5 rounded-lg text-xs text-white font-semibold" style={`background: linear-gradient(135deg, ${barColors[yi % barColors.length][0]}, ${barColors[yi % barColors.length][1]})`}>{items.length} 篇</span>
             </div>
 
             {kws.length > 0 && (
@@ -65,7 +170,7 @@ const yearKeywords = sortedYears.map(y => ({
                 {kws.map((kw, ki) => (
                   <span
                     class="keyword-pill"
-                    style={`animation-delay: ${Math.min(yi * 0.08 + ki * 0.04, 0.8)}s; --kw-size: ${Math.max(0.82, 1.02 - ki * 0.03)}rem`}
+                    style={`animation-delay: ${Math.min(yi * 0.08 + ki * 0.04, 0.8)}s; --kw-size: ${Math.max(0.82, 1.02 - ki * 0.03)}rem; --pill-hue: ${barColors[yi % barColors.length][0]}`}
                   >
                     {kw}
                   </span>
@@ -100,61 +205,306 @@ const yearKeywords = sortedYears.map(y => ({
 </BaseLayout>
 
 <style>
-  .timeline-chart {
-    display: flex;
-    align-items: flex-end;
-    gap: clamp(0.5rem, 2vw, 1.2rem);
-    height: 180px;
-    padding: 0 0.5rem;
+  /* ========== 统计概览 ========== */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
   }
-
-  .chart-bar-group {
-    flex: 1;
+  .stat-card {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    height: 100%;
-    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    border-radius: 1.4rem;
   }
-
-  .chart-bar {
-    width: 100%;
-    max-width: 3.5rem;
-    border-radius: 0.6rem 0.6rem 0.2rem 0.2rem;
-    background: linear-gradient(180deg, var(--color-morandi-sage), #8aab8e);
+  .stat-ring {
     position: relative;
-    min-height: 4px;
-    transform-origin: bottom center;
-    animation: bar-grow 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    width: 3.2rem;
+    height: 3.2rem;
+    flex-shrink: 0;
   }
-
-  .chart-bar-count {
+  .stat-ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .stat-ring-fill {
+    transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .stat-ring-num {
     position: absolute;
-    top: -1.6rem;
-    left: 50%;
-    transform: translateX(-50%);
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--color-morandi-text);
+  }
+  .stat-label {
     font-size: 0.78rem;
+    color: var(--color-morandi-subtle);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.15rem;
+  }
+  .stat-value {
+    font-size: 1rem;
     font-weight: 700;
     color: var(--color-morandi-text);
   }
 
-  .chart-bar-year {
-    font-size: 0.75rem;
-    color: var(--color-morandi-muted);
+  /* ========== 趋势图 ========== */
+  .chart-section {
+    position: relative;
+    padding: 1.8rem 1.6rem 1.2rem;
+    overflow: hidden;
+  }
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.4rem;
+  }
+  .chart-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .chart-legend-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+  }
+
+  .chart-canvas {
+    position: relative;
+    height: 240px;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .chart-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .chart-gridline {
+    position: absolute;
+    left: 2.2rem;
+    right: 0;
+    bottom: calc(var(--line-y) * 0.85 + 32px);
+    height: 1px;
+    background: var(--color-morandi-border);
+  }
+  .chart-gridline-label {
+    position: absolute;
+    left: -2.2rem;
+    top: -0.55rem;
+    font-size: 0.68rem;
+    color: var(--color-morandi-subtle);
     font-weight: 600;
+    width: 2rem;
+    text-align: right;
+  }
+
+  .chart-area-svg {
+    position: absolute;
+    left: 2.4rem;
+    right: 0.4rem;
+    bottom: 32px;
+    height: calc(100% - 48px);
+    pointer-events: none;
+  }
+  .chart-area-path {
+    opacity: 0;
+    animation: area-reveal 1.2s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .chart-line-path {
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: line-draw 1.8s 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes area-reveal { to { opacity: 1; } }
+  @keyframes line-draw { to { stroke-dashoffset: 0; } }
+
+  .chart-bars {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(0.4rem, 1.8vw, 1rem);
+    width: 100%;
+    height: 100%;
+    padding: 0 0 32px 2.4rem;
+  }
+
+  .cbar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    height: 100%;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+  .cbar-group:hover .cbar { filter: brightness(1.08); }
+  .cbar-group:hover .cbar-inner { transform: scaleY(1.04); }
+
+  .cbar {
+    width: 100%;
+    max-width: 3.6rem;
+    border-radius: 0.7rem 0.7rem 0.18rem 0.18rem;
+    position: relative;
+    min-height: 4px;
+    transform-origin: bottom center;
+    animation: bar-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    overflow: hidden;
+  }
+  .cbar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: bottom center;
+  }
+  .cbar-shine {
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+    animation: bar-shine 2.4s 1s ease-in-out infinite;
+  }
+  @keyframes bar-shine {
+    0%,100% { left: -60%; opacity: 0; }
+    50% { left: 110%; opacity: 1; }
+  }
+
+  .cbar-count {
+    position: absolute;
+    top: -1.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--color-morandi-text);
+    opacity: 0;
+    animation: count-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes count-pop {
+    0% { opacity: 0; transform: translateX(-50%) translateY(6px) scale(0.8); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  }
+
+  .cbar-year {
+    font-size: 0.78rem;
+    color: var(--color-morandi-muted);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .cbar-group:hover .cbar-year {
+    color: var(--color-morandi-text);
   }
 
   @keyframes bar-grow {
     0% { transform: scaleY(0); opacity: 0; }
+    60% { opacity: 1; }
     100% { transform: scaleY(1); opacity: 1; }
   }
 
+  /* Tooltip */
+  .chart-tooltip {
+    position: absolute;
+    z-index: 20;
+    padding: 0.85rem 1rem;
+    border-radius: 1rem;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    min-width: 140px;
+  }
+  .chart-tooltip-year {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--color-morandi-text);
+    margin-bottom: 0.2rem;
+  }
+  .chart-tooltip-count {
+    font-size: 0.82rem;
+    color: var(--color-morandi-muted);
+    margin-bottom: 0.4rem;
+  }
+  .chart-tooltip-kws {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  .chart-tooltip-kw {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(163,181,166,0.18);
+    color: #5a7560;
+  }
+
+  /* ========== 关键词云 ========== */
+  .kw-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    padding: 1.5rem 0;
+  }
+  .kw-bubble {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: default;
+    position: relative;
+    animation: bubble-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.35s ease,
+                background 0.35s ease;
+  }
+  .kw-bubble:hover {
+    transform: translateY(-4px) scale(1.1);
+    z-index: 5;
+  }
+  .kw-bubble-years {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .kw-bubble:hover .kw-bubble-years {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  @keyframes bubble-in {
+    0% { opacity: 0; transform: scale(0.5) rotate(-8deg); }
+    60% { opacity: 1; transform: scale(1.06) rotate(1deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  /* ========== 时间线 ========== */
   .timeline-section {
     position: relative;
     padding: 2rem 0;
   }
-
   .timeline-track {
     position: absolute;
     left: 1.25rem;
@@ -170,13 +520,11 @@ const yearKeywords = sortedYears.map(y => ({
     );
     border-radius: 1px;
   }
-
   .timeline-node {
     position: relative;
     padding-left: 3.5rem;
     margin-bottom: 2rem;
   }
-
   .timeline-dot-wrap {
     position: absolute;
     left: 0;
@@ -187,16 +535,12 @@ const yearKeywords = sortedYears.map(y => ({
     align-items: center;
     gap: 0.35rem;
   }
-
   .timeline-dot {
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--color-morandi-sage), #8aab8e);
-    box-shadow: 0 0 0 3px var(--color-morandi-bg), 0 0 0 5px var(--color-morandi-sage);
     flex-shrink: 0;
   }
-
   .timeline-year-label {
     font-size: 0.7rem;
     font-weight: 700;
@@ -204,7 +548,6 @@ const yearKeywords = sortedYears.map(y => ({
     letter-spacing: 0.02em;
     white-space: nowrap;
   }
-
   .keyword-pill {
     display: inline-flex;
     align-items: center;
@@ -218,7 +561,6 @@ const yearKeywords = sortedYears.map(y => ({
     animation: spring-fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
   }
-
   .keyword-pill:hover {
     transform: translateY(-2px) scale(1.04);
     background: rgba(163, 181, 166, 0.3);
@@ -229,7 +571,6 @@ const yearKeywords = sortedYears.map(y => ({
       left: 50%;
       transform: translateX(-50%);
     }
-
     .timeline-node {
       padding-left: 0;
       display: grid;
@@ -237,7 +578,6 @@ const yearKeywords = sortedYears.map(y => ({
       gap: 1.5rem;
       align-items: start;
     }
-
     .timeline-node:nth-child(odd) .timeline-card {
       grid-column: 1;
       grid-row: 1;
@@ -249,7 +589,6 @@ const yearKeywords = sortedYears.map(y => ({
       width: auto;
       padding-top: 0.2rem;
     }
-
     .timeline-node:nth-child(even) .timeline-card {
       grid-column: 3;
       grid-row: 1;
@@ -263,44 +602,172 @@ const yearKeywords = sortedYears.map(y => ({
     }
   }
 
+  /* ========== 深色模式 ========== */
   :global(html.dark) .timeline-dot {
-    box-shadow: 0 0 0 3px #1e1c1a, 0 0 0 5px var(--color-morandi-sage);
+    box-shadow-color: #1e1c1a;
   }
-
   :global(html.dark) .keyword-pill {
     color: #a3c4a8;
     background: rgba(163, 181, 166, 0.12);
     border-color: rgba(163, 181, 166, 0.18);
   }
-
   :global(html.dark) .keyword-pill:hover {
     background: rgba(163, 181, 166, 0.22);
   }
-
-  :global(html.dark) .chart-bar {
-    background: linear-gradient(180deg, var(--color-morandi-sage), #6a8a6e);
+  :global(html.dark) .chart-tooltip-kw {
+    color: #a3c4a8;
+    background: rgba(163, 181, 166, 0.15);
+  }
+  :global(html.dark) .kw-bubble-years {
+    background: rgba(30, 28, 26, 0.9);
+    color: #d6cfc9;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .chart-bar { animation: none; }
-    .keyword-pill { animation: none; }
+    .cbar,
+    .chart-area-path,
+    .chart-line-path,
+    .keyword-pill,
+    .kw-bubble,
+    .cbar-shine { animation: none !important; }
+    .chart-line-path { stroke-dashoffset: 0; }
+    .chart-area-path { opacity: 1; }
+    .stat-ring-fill { transition: none; }
   }
 </style>
 
 <script define:vars={{ yearKeywords }}>
-  const chartEl = document.getElementById('timeline-chart');
-  if (chartEl && yearKeywords.length > 0) {
-    const maxCount = Math.max(...yearKeywords.map(y => y.count));
-    chartEl.innerHTML = yearKeywords.map((y, i) => {
-      const heightPct = Math.max(8, (y.count / maxCount) * 100);
-      const delay = i * 0.1;
+  const maxCount = Math.max(...yearKeywords.map(y => y.count));
+
+  // Stat ring counters
+  document.querySelectorAll('.stat-ring-num').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    let current = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+    const iv = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current;
+      if (current >= target) clearInterval(iv);
+    }, 30);
+  });
+
+  document.querySelectorAll('.stat-ring-fill').forEach((el, i) => {
+    const targets = [100, 100, 100];
+    setTimeout(() => {
+      el.style.strokeDashoffset = String(100 - targets[i] * 0.75);
+    }, 200 + i * 150);
+  });
+
+  // Grid labels
+  const midEl = document.getElementById('grid-mid');
+  const maxEl = document.getElementById('grid-max');
+  if (midEl) midEl.textContent = String(Math.round(maxCount / 2));
+  if (maxEl) maxEl.textContent = String(maxCount);
+
+  // Build bars
+  const barsEl = document.getElementById('chart-bars');
+  const tooltipEl = document.getElementById('chart-tooltip');
+  const sectionEl = document.querySelector('.chart-section');
+
+  if (barsEl) {
+    barsEl.innerHTML = yearKeywords.map((y, i) => {
+      const heightPct = Math.max(8, (y.count / maxCount) * 85);
+      const delay = 0.1 + i * 0.08;
+      const countDelay = 0.4 + i * 0.08;
+      const [c1, c2] = y.color;
       return `
-        <div class="chart-bar-group">
-          <div class="chart-bar" style="height: ${heightPct}%; animation-delay: ${delay}s;">
-            <span class="chart-bar-count">${y.count}</span>
+        <div class="cbar-group" data-idx="${i}">
+          <div class="cbar" style="height:${heightPct}%; animation-delay:${delay}s; background: linear-gradient(180deg, ${c1}, ${c2});">
+            <div class="cbar-inner"></div>
+            <div class="cbar-shine"></div>
+            <span class="cbar-count" style="animation-delay:${countDelay}s; color: ${c2}">${y.count}</span>
           </div>
-          <span class="chart-bar-year">${y.year}</span>
+          <span class="cbar-year">${y.year}</span>
         </div>
+      `;
+    }).join('');
+
+    // Tooltip interaction
+    barsEl.querySelectorAll('.cbar-group').forEach(g => {
+      g.addEventListener('mouseenter', (e) => {
+        const idx = parseInt(g.dataset.idx);
+        const y = yearKeywords[idx];
+        tooltipEl.querySelector('.chart-tooltip-year').textContent = y.year + ' 年';
+        tooltipEl.querySelector('.chart-tooltip-count').textContent = y.count + ' 篇政策文件';
+        tooltipEl.querySelector('.chart-tooltip-kws').innerHTML = y.keywords.slice(0, 5).map(k =>
+          '<span class="chart-tooltip-kw">' + k + '</span>'
+        ).join('');
+        tooltipEl.style.display = 'block';
+
+        const rect = g.getBoundingClientRect();
+        const sRect = sectionEl.getBoundingClientRect();
+        tooltipEl.style.left = (rect.left - sRect.left + rect.width / 2 - 70) + 'px';
+        tooltipEl.style.top = (rect.top - sRect.top - tooltipEl.offsetHeight - 8) + 'px';
+      });
+      g.addEventListener('mouseleave', () => {
+        tooltipEl.style.display = 'none';
+      });
+    });
+  }
+
+  // Build SVG area + line paths
+  const areaPath = document.getElementById('area-path');
+  const linePath = document.getElementById('line-path');
+  if (areaPath && linePath && yearKeywords.length > 1) {
+    const w = 800;
+    const h = 220;
+    const n = yearKeywords.length;
+    const stepX = w / (n - 1);
+    const points = yearKeywords.map((y, i) => ({
+      x: i * stepX,
+      y: h - (y.count / maxCount) * h * 0.85 - h * 0.05
+    }));
+
+    let lineD = 'M' + points[0].x + ' ' + points[0].y;
+    for (let i = 1; i < points.length; i++) {
+      const cx = (points[i - 1].x + points[i].x) / 2;
+      lineD += ' C' + cx + ' ' + points[i - 1].y + ' ' + cx + ' ' + points[i].y + ' ' + points[i].x + ' ' + points[i].y;
+    }
+    linePath.setAttribute('d', lineD);
+
+    const areaD = lineD + ' L' + points[n - 1].x + ' ' + h + ' L' + points[0].x + ' ' + h + ' Z';
+    areaPath.setAttribute('d', areaD);
+  }
+
+  // Build keyword cloud
+  const cloudEl = document.getElementById('kw-cloud');
+  if (cloudEl) {
+    const kwMap = {};
+    yearKeywords.forEach(y => {
+      y.keywords.forEach(kw => {
+        if (!kwMap[kw]) kwMap[kw] = { count: 0, years: [] };
+        kwMap[kw].count++;
+        kwMap[kw].years.push(y.year);
+      });
+    });
+
+    const entries = Object.entries(kwMap).sort((a, b) => b[1].count - a[1].count);
+    const maxKw = entries[0] ? entries[0][1].count : 1;
+    const palette = [
+      ['#c4a6a0','rgba(196,166,160,0.15)','rgba(196,166,160,0.3)'],
+      ['#a3b5a6','rgba(163,181,166,0.15)','rgba(163,181,166,0.3)'],
+      ['#b0a8ba','rgba(176,168,186,0.15)','rgba(176,168,186,0.3)'],
+      ['#b8a99a','rgba(184,169,154,0.15)','rgba(184,169,154,0.3)'],
+      ['#a3937e','rgba(163,147,126,0.15)','rgba(163,147,126,0.3)'],
+    ];
+
+    cloudEl.innerHTML = entries.map(([kw, info], i) => {
+      const scale = 0.72 + (info.count / maxKw) * 0.5;
+      const fontSize = (0.78 + (info.count / maxKw) * 0.42).toFixed(2);
+      const p = palette[i % palette.length];
+      const delay = (i * 0.04).toFixed(2);
+      return `
+        <span class="kw-bubble"
+          style="font-size:${fontSize}rem; color:${p[0]}; background:${p[1]}; border:1px solid ${p[2]}; animation-delay:${delay}s; box-shadow: 0 2px 8px ${p[2]};"
+          title="${kw} — 出现 ${info.count} 次">
+          ${kw}
+          <span class="kw-bubble-years glass-strong">${info.years.join(', ')}</span>
+        </span>
       `;
     }).join('');
   }
