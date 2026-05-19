@@ -15,16 +15,58 @@
   },
   {
     "id": "3",
+    "name": "肢体类残障人士双人房",
+    "category": "肢体类",
+    "description": "门采取横向滑动按钮门，便于拄拐单腿支撑通行。书桌配套椅子采用轮滑，方便移动坐下。在床头梳妆台穿衣镜附近设置便于拐杖放置的支架，方便快速拿取使用。衣柜与穿衣镜近，方便拿取衣物搭配服装。衣柜采用横向移动门，便于拄拐支撑时开关柜子。",
+    "images": ["/images/cases/肢体类残障人士双人房/1.png", "/images/cases/肢体类残障人士双人房/2.png", "/images/cases/肢体类残障人士双人房/3.png", "/images/cases/肢体类残障人士双人房/4.png", "/images/cases/肢体类残障人士双人房/5.png", "/images/cases/肢体类残障人士双人房/6.png"]
+  },
+  {
+    "id": "4",
+    "name": "肢体类残障人士轮椅厨房",
+    "category": "肢体类",
+    "description": "厨房操作台面下部镂空，且高度适合，便于坐在轮椅上操作。设置置物架，避免柜子柜门开关带来的空间需求。",
+    "images": ["/images/cases/肢体类残障人士轮椅厨房/1.png", "/images/cases/肢体类残障人士轮椅厨房/2.png", "/images/cases/肢体类残障人士轮椅厨房/3.png", "/images/cases/肢体类残障人士轮椅厨房/4.png", "/images/cases/肢体类残障人士轮椅厨房/5.png", "/images/cases/肢体类残障人士轮椅厨房/6.png"]
+  },
+  {
+    "id": "5",
+    "name": "肢体类轮椅残障人士厨房餐厅客厅三合一",
+    "category": "肢体类",
+    "description": "厨房操作台面下部镂空，且高度适合，便于坐在轮椅上操作。设置置物架，避免柜子柜门开关带来的空间需求。冰箱高度低，且位置便于从各个方向拿取。餐桌与厨房操作台只隔一个过道，节省轮椅移动需要。餐桌设置可升降，且只配备一把椅子。厨房到客厅过道平直宽敞且无障碍物，适合轮椅使用。客厅沙发不设扶手，方便从各个方向在轮椅和沙发之间转换位置。电视机采用悬挂式可旋转，便于从房间的各个角度娱乐，减少轮椅移动需要。",
+    "images": ["/images/cases/肢体类轮椅残障人士厨房餐厅客厅三合一/1.png", "/images/cases/肢体类轮椅残障人士厨房餐厅客厅三合一/2.png", "/images/cases/肢体类轮椅残障人士厨房餐厅客厅三合一/3.png", "/images/cases/肢体类轮椅残障人士厨房餐厅客厅三合一/4.png", "/images/cases/肢体类轮椅残障人士厨房餐厅客厅三合一/5.png", "/images/cases/肢体类轮椅残障人士厨房餐厅客厅三合一/6.png"]
+  },
+  {
+    "id": "6",
+    "name": "听障人士卧室",
+    "category": "听障类",
+    "description": "床头设置照明灯与光学闹钟。门上设置压力传感器，如有人敲门，门内侧有LED灯闪光提示。床头处设置紧急按钮。",
+    "images": ["/images/cases/听障人士卧室/1.png", "/images/cases/听障人士卧室/2.png", "/images/cases/听障人士卧室/3.png", "/images/cases/听障人士卧室/4.png", "/images/cases/听障人士卧室/5.png", "/images/cases/听障人士卧室/6.png"]
+  },
+  {
+    "id": "7",
+    "name": "听障类厨房",
+    "category": "听障类",
+    "description": "在台面边缘设置感应凸起灯条，防止物品滑落并起到光提示作用。厨房的门采用透明玻璃，方便厨房内外信息传递。在开水壶、炒锅附近设置温度计以及温感光报警器，必要时利用温感装置直接切断电路。",
+    "images": ["/images/cases/听障类厨房/1.png", "/images/cases/听障类厨房/2.png", "/images/cases/听障类厨房/3.png", "/images/cases/听障类厨房/4.png", "/images/cases/听障类厨房/5.png", "/images/cases/听障类厨房/6.png"]
+  },
+  {
+    "id": "8",
     "name": "视障类厨房",
     "category": "视障类",
     "description": "使用电磁炉代替明火，降低安全风险。餐具厨具在把柄处和放置处均有盲文提示，且分开独立放置，减少移动物品的放置位置。按钮类的增加盲文提示，屋内设置烟雾报警器。",
     "images": ["/images/cases/视障类厨房/1.png", "/images/cases/视障类厨房/2.png", "/images/cases/视障类厨房/3.png", "/images/cases/视障类厨房/4.png", "/images/cases/视障类厨房/5.png", "/images/cases/视障类厨房/6.png"]
   },
   {
-    "id": "4",
+    "id": "9",
+    "name": "视障类卫生间",
+    "category": "视障类",
+    "description": "卫生间门采用横向移动门，进门后直走即可进入浴室，向右直走即可到洗漱台。洗漱台设置分格置物架，方便对物品放置位置区分，便于记忆和拿取。墙体上均设有扶手，在易摔倒处设置紧急按钮。浴室门采用向外单轴玻璃门，外部扶手方便放置衣物及毛巾。浴室内部铺防滑垫，外部铺瓷砖，方便使用者通过触感区分区域。浴室内设置扶手及紧急按钮。马桶处设置扶手和自动感应垃圾桶。",
+    "images": ["/images/cases/视障类卫生间/1.png", "/images/cases/视障类卫生间/2.png", "/images/cases/视障类卫生间/3.png", "/images/cases/视障类卫生间/4.png", "/images/cases/视障类卫生间/5.png", "/images/cases/视障类卫生间/6.png"]
+  },
+  {
+    "id": "10",
     "name": "视障类玄关",
     "category": "视障类",
     "description": "玄关柜子的置物台分格分区，使用盲文标记日常放置物品，柜子高度符合人体使用尺寸，玄关椅与鞋架相邻，方便拿取。",
-    "images": ["/images/cases/视障类玄关/1.png", "/images/cases/视障类玄关/2.png"]
+    "images": ["/images/cases/视障类玄关/1.png", "/images/cases/视障类玄关/2.png", "/images/cases/视障类玄关/3.png", "/images/cases/视障类玄关/4.png"]
   }
 ]

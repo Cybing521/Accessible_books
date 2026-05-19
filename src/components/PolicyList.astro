@@ -1,28 +1,53 @@
 ---
 interface Props {
-  policies: Array<{ id: string; title: string; file: string }>;
+  policies: Array<{ id: string; title: string; file: string; year?: number }>;
 }
 const { policies } = Astro.props;
 ---
-<div class="mb-8 animate-spring-fade">
-  <input
-    type="search"
-    id="policy-search"
-    placeholder="搜索政策标题..."
-    class="w-full px-5 py-3 glass rounded-xl text-morandi-text placeholder-morandi-subtle focus:outline-none focus:ring-2 focus:ring-morandi-accent/30 transition-all duration-300"
-    aria-label="搜索政策"
-  />
+<div class="mb-6 animate-spring-fade">
+  <div class="flex flex-wrap gap-3 items-center">
+    <input
+      type="search"
+      id="policy-search"
+      placeholder="搜索文件标题..."
+      class="flex-1 min-w-[200px] px-5 py-3 glass rounded-xl text-morandi-text placeholder-morandi-subtle focus:outline-none focus:ring-2 focus:ring-morandi-accent/30 transition-all duration-300"
+      aria-label="搜索政策"
+    />
+    <div class="flex gap-2 flex-wrap" id="year-filters" role="group" aria-label="年份筛选"></div>
+  </div>
 </div>
 <ul id="policy-list" class="space-y-3"></ul>
 <div id="policy-empty" class="hidden text-center py-20 text-morandi-muted">
-  <p class="text-morandi-text">暂无匹配的政策文件</p>
-  <p class="mt-2 text-sm text-morandi-subtle">尝试调整搜索关键词</p>
+  <p class="text-morandi-text">暂无匹配的文件</p>
+  <p class="mt-2 text-sm text-morandi-subtle">尝试调整搜索关键词或年份筛选</p>
 </div>
 
 <script define:vars={{ policies }}>
   const searchEl = document.getElementById('policy-search');
   const listEl = document.getElementById('policy-list');
   const emptyEl = document.getElementById('policy-empty');
+  const filtersEl = document.getElementById('year-filters');
+
+  let activeYear = null;
+
+  const years = [...new Set(policies.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
+
+  function renderFilters() {
+    const allBtn = `<button type="button" data-year="all" class="year-btn px-3 py-1.5 rounded-lg text-xs glass-strong spring-btn transition-all duration-300 ${activeYear === null ? 'text-morandi-text font-semibold' : 'text-morandi-muted'}">全部</button>`;
+    const yearBtns = years.map(y =>
+      `<button type="button" data-year="${y}" class="year-btn px-3 py-1.5 rounded-lg text-xs glass-strong spring-btn transition-all duration-300 ${activeYear === y ? 'text-morandi-text font-semibold' : 'text-morandi-muted'}">${y}</button>`
+    ).join('');
+    filtersEl.innerHTML = allBtn + yearBtns;
+
+    filtersEl.querySelectorAll('.year-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.dataset.year;
+        activeYear = val === 'all' ? null : parseInt(val);
+        renderFilters();
+        update();
+      });
+    });
+  }
 
   function escapeHtml(s) {
     const div = document.createElement('div');
@@ -32,8 +57,9 @@ const { policies } = Astro.props;
 
   function renderItem(p, i) {
     const title = escapeHtml(p.title);
-    const file = escapeHtml(p.file);
+    const file = encodeURI(p.file);
     const delay = Math.min(i * 0.03, 0.25);
+    const yearBadge = p.year ? `<span class="px-2 py-0.5 rounded-lg text-xs glass-strong text-morandi-subtle flex-shrink-0">${p.year}</span>` : '';
     return `
       <li style="animation: spring-fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s both;">
         <a href="${file}" target="_blank" rel="noopener noreferrer"
@@ -42,6 +68,7 @@ const { policies } = Astro.props;
             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
           </div>
           <span class="font-medium text-morandi-text flex-1 min-w-0 text-[15px]">${title}</span>
+          ${yearBadge}
           <svg class="w-4 h-4 text-morandi-subtle flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
         </a>
       </li>
@@ -50,9 +77,14 @@ const { policies } = Astro.props;
 
   function update() {
     const q = (searchEl.value || '').trim().toLowerCase();
-    const filtered = q
-      ? policies.filter((p) => p.title && p.title.toLowerCase().includes(q))
-      : policies;
+    let filtered = policies;
+
+    if (q) {
+      filtered = filtered.filter(p => p.title && p.title.toLowerCase().includes(q));
+    }
+    if (activeYear !== null) {
+      filtered = filtered.filter(p => p.year === activeYear);
+    }
 
     if (filtered.length === 0) {
       listEl.innerHTML = '';
@@ -65,6 +97,7 @@ const { policies } = Astro.props;
     }
   }
 
+  renderFilters();
   searchEl.addEventListener('input', update);
   searchEl.addEventListener('search', update);
   update();

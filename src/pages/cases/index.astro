@@ -1,15 +1,28 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import cases from '../../data/cases.json';
+
+const categories = [...new Set(cases.map(c => c.category))];
 ---
 <BaseLayout title="整装案例设计 - 无碍e家" showBreadcrumb breadcrumb={[{ label: '首页', href: '/' }, { label: '整装案例设计' }]}>
   <div class="mb-10 animate-spring-fade">
     <h1 class="text-2xl sm:text-3xl font-semibold text-morandi-text tracking-tight mb-2">整装案例设计</h1>
-    <p class="text-morandi-muted">无障碍整装空间设计方案</p>
+    <p class="text-morandi-muted">无障碍整装空间设计方案 · 共 {cases.length} 个案例</p>
   </div>
-  <div class="grid gap-6 sm:grid-cols-2">
+
+  <div class="flex flex-wrap gap-2 mb-8" id="case-filters" role="group" aria-label="分类筛选">
+    <button type="button" data-cat="all" class="cat-btn active px-4 py-2 rounded-xl text-sm glass-strong spring-btn text-morandi-text font-semibold transition-all duration-300">全部</button>
+    {categories.map(cat => (
+      <button type="button" data-cat={cat} class="cat-btn px-4 py-2 rounded-xl text-sm glass-strong spring-btn text-morandi-muted transition-all duration-300">{cat}</button>
+    ))}
+  </div>
+
+  <div class="grid gap-6 sm:grid-cols-2" id="cases-grid">
     {cases.map((c, i) => (
-      <a href={`/cases/${c.id}`} class="block glass spring-card rounded-2xl overflow-hidden animate-spring-in" style={`animation-delay: ${Math.min(i * 0.05, 0.3)}s`}>
+      <a href={`/cases/${c.id}`}
+        data-category={c.category}
+        class="case-item block glass spring-card rounded-2xl overflow-hidden scroll-reveal"
+        style={`animation-delay: ${Math.min(i * 0.05, 0.3)}s`}>
         <img src={c.images[0]} alt={c.name} class="w-full h-56 object-cover" loading="lazy" style="background: linear-gradient(135deg, #f5f0ec, #ede6e0, #f0ebe6);" />
         <div class="p-5">
           <div class="flex items-center gap-2 mb-2">
@@ -22,3 +35,75 @@ import cases from '../../data/cases.json';
     ))}
   </div>
 </BaseLayout>
+
+<style>
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .case-item.hiding {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+    position: absolute;
+    visibility: hidden;
+  }
+  .cat-btn.active {
+    color: var(--color-morandi-text);
+    font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+  const filterBtns = document.querySelectorAll('.cat-btn');
+  const items = document.querySelectorAll('.case-item');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      filterBtns.forEach(b => b.classList.remove('active', 'text-morandi-text', 'font-semibold'));
+      filterBtns.forEach(b => b.classList.add('text-morandi-muted'));
+      btn.classList.add('active', 'text-morandi-text', 'font-semibold');
+      btn.classList.remove('text-morandi-muted');
+
+      items.forEach(item => {
+        const el = item as HTMLElement;
+        const match = cat === 'all' || el.dataset.category === cat;
+        if (match) {
+          el.classList.remove('hiding');
+          el.style.display = '';
+          requestAnimationFrame(() => {
+            el.classList.add('revealed');
+          });
+        } else {
+          el.classList.add('hiding');
+          setTimeout(() => { el.style.display = 'none'; }, 300);
+        }
+      });
+    });
+  });
+</script>
