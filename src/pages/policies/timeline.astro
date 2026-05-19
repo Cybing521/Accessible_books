@@ -104,34 +104,11 @@ const yearKeywords = sortedYears.map((y, i) => ({
       <div class="chart-legend">
         <span class="chart-legend-dot" style="background: var(--color-morandi-sage)"></span>
         <span class="text-xs text-morandi-muted">文件数量</span>
+        <span class="chart-legend-dot" style="background: var(--color-morandi-rose); margin-left: 0.6rem"></span>
+        <span class="text-xs text-morandi-muted">趋势线</span>
       </div>
     </div>
-
-    <div class="chart-canvas">
-      <!-- 背景水平参考线 -->
-      <div class="chart-grid" aria-hidden="true">
-        <div class="chart-gridline" style="--line-y: 0%"><span class="chart-gridline-label">0</span></div>
-        <div class="chart-gridline" style="--line-y: 50%"><span class="chart-gridline-label" id="grid-mid"></span></div>
-        <div class="chart-gridline" style="--line-y: 100%"><span class="chart-gridline-label" id="grid-max"></span></div>
-      </div>
-
-      <!-- 面积填充层 -->
-      <svg class="chart-area-svg" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <linearGradient id="area-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--color-morandi-sage)" stop-opacity="0.28"/>
-            <stop offset="100%" stop-color="var(--color-morandi-sage)" stop-opacity="0.02"/>
-          </linearGradient>
-        </defs>
-        <path id="area-path" fill="url(#area-grad)" d="" class="chart-area-path"/>
-        <path id="line-path" fill="none" stroke="var(--color-morandi-sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="" class="chart-line-path"/>
-      </svg>
-
-      <!-- 柱状图 -->
-      <div class="chart-bars" id="chart-bars"></div>
-    </div>
-
-    <!-- Tooltip -->
+    <div class="unified-chart" id="unified-chart" role="img" aria-label="年度发文趋势柱状图与折线"></div>
     <div id="chart-tooltip" class="chart-tooltip glass-strong" style="display:none">
       <div class="chart-tooltip-year"></div>
       <div class="chart-tooltip-count"></div>
@@ -259,12 +236,14 @@ const yearKeywords = sortedYears.map((y, i) => ({
   .chart-section {
     position: relative;
     padding: 1.8rem 1.6rem 1.2rem;
-    overflow: hidden;
+    overflow: visible;
   }
   .chart-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     margin-bottom: 1.4rem;
   }
   .chart-legend {
@@ -278,152 +257,73 @@ const yearKeywords = sortedYears.map((y, i) => ({
     border-radius: 999px;
   }
 
-  .chart-canvas {
-    position: relative;
-    height: 240px;
-    display: flex;
-    align-items: flex-end;
+  .unified-chart {
+    width: 100%;
+    aspect-ratio: 2.6 / 1;
+    min-height: 220px;
+    max-height: 340px;
   }
-
-  .chart-grid {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .chart-gridline {
-    position: absolute;
-    left: 2.2rem;
-    right: 0;
-    bottom: calc(var(--line-y) * 0.85 + 32px);
-    height: 1px;
-    background: var(--color-morandi-border);
-  }
-  .chart-gridline-label {
-    position: absolute;
-    left: -2.2rem;
-    top: -0.55rem;
-    font-size: 0.68rem;
-    color: var(--color-morandi-subtle);
-    font-weight: 600;
-    width: 2rem;
-    text-align: right;
-  }
-
-  .chart-area-svg {
-    position: absolute;
-    left: 2.4rem;
-    right: 0.4rem;
-    bottom: 32px;
-    height: calc(100% - 48px);
-    pointer-events: none;
-  }
-  .chart-area-path {
-    opacity: 0;
-    animation: area-reveal 1.2s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-  .chart-line-path {
-    stroke-dasharray: 2000;
-    stroke-dashoffset: 2000;
-    animation: line-draw 1.8s 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-  @keyframes area-reveal { to { opacity: 1; } }
-  @keyframes line-draw { to { stroke-dashoffset: 0; } }
-
-  .chart-bars {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: flex-end;
-    gap: clamp(0.4rem, 1.8vw, 1rem);
+  .unified-chart :global(svg) {
+    display: block;
     width: 100%;
     height: 100%;
-    padding: 0 0 32px 2.4rem;
+    overflow: visible;
   }
 
-  .cbar-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.45rem;
-    height: 100%;
-    justify-content: flex-end;
-    cursor: pointer;
+  :global(.uc-bar) {
+    transform-origin: center bottom;
+    animation: uc-bar-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .cbar-group:hover .cbar { filter: brightness(1.08); }
-  .cbar-group:hover .cbar-inner { transform: scaleY(1.04); }
-
-  .cbar {
-    width: 100%;
-    max-width: 3.6rem;
-    border-radius: 0.7rem 0.7rem 0.18rem 0.18rem;
-    position: relative;
-    min-height: 4px;
-    transform-origin: bottom center;
-    animation: bar-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-    overflow: hidden;
-  }
-  .cbar-inner {
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    transform-origin: bottom center;
-  }
-  .cbar-shine {
-    position: absolute;
-    top: 0;
-    left: -60%;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
-    animation: bar-shine 2.4s 1s ease-in-out infinite;
-  }
-  @keyframes bar-shine {
-    0%,100% { left: -60%; opacity: 0; }
-    50% { left: 110%; opacity: 1; }
-  }
-
-  .cbar-count {
-    position: absolute;
-    top: -1.8rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--color-morandi-text);
-    opacity: 0;
-    animation: count-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-  @keyframes count-pop {
-    0% { opacity: 0; transform: translateX(-50%) translateY(6px) scale(0.8); }
-    100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-  }
-
-  .cbar-year {
-    font-size: 0.78rem;
-    color: var(--color-morandi-muted);
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-  .cbar-group:hover .cbar-year {
-    color: var(--color-morandi-text);
-  }
-
-  @keyframes bar-grow {
-    0% { transform: scaleY(0); opacity: 0; }
-    60% { opacity: 1; }
+  @keyframes uc-bar-grow {
+    0%   { transform: scaleY(0); opacity: 0; }
+    60%  { opacity: 1; }
     100% { transform: scaleY(1); opacity: 1; }
   }
+  :global(.uc-shine) {
+    animation: uc-shine-move 3s 1.2s ease-in-out infinite;
+  }
+  @keyframes uc-shine-move {
+    0%, 100% { transform: translateX(-200%); opacity: 0; }
+    50%      { transform: translateX(200%); opacity: 1; }
+  }
+  :global(.uc-area) {
+    opacity: 0;
+    animation: area-reveal 1s 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  :global(.uc-line) {
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 3000;
+    animation: line-draw 2s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  :global(.uc-dot) {
+    opacity: 0;
+    animation: dot-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  :global(.uc-count) {
+    opacity: 0;
+    animation: count-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes area-reveal { to { opacity: 1; } }
+  @keyframes line-draw   { to { stroke-dashoffset: 0; } }
+  @keyframes dot-pop {
+    0%   { opacity: 0; transform: scale(0); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes count-pop {
+    0%   { opacity: 0; transform: translateY(5px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
 
-  /* Tooltip */
+  :global(.uc-hit) { cursor: pointer; }
+  :global(.uc-hit:hover ~ .uc-bar) { filter: brightness(1.1); }
+
   .chart-tooltip {
     position: absolute;
     z-index: 20;
     padding: 0.85rem 1rem;
     border-radius: 1rem;
     pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.22,1,0.36,1);
     min-width: 140px;
   }
   .chart-tooltip-year {
@@ -658,80 +558,117 @@ const yearKeywords = sortedYears.map((y, i) => ({
     }, 200 + i * 150);
   });
 
-  // Grid labels
-  const midEl = document.getElementById('grid-mid');
-  const maxEl = document.getElementById('grid-max');
-  if (midEl) midEl.textContent = String(Math.round(maxCount / 2));
-  if (maxEl) maxEl.textContent = String(maxCount);
+  // ── Unified SVG chart ──
+  const chartWrap = document.getElementById('unified-chart');
+  const tooltipEl  = document.getElementById('chart-tooltip');
+  const sectionEl  = document.querySelector('.chart-section');
 
-  // Build bars
-  const barsEl = document.getElementById('chart-bars');
-  const tooltipEl = document.getElementById('chart-tooltip');
-  const sectionEl = document.querySelector('.chart-section');
+  if (chartWrap && yearKeywords.length) {
+    const n   = yearKeywords.length;
+    const pad = { top: 28, bottom: 28, left: 38, right: 12 };
+    const vW  = pad.left + n * 80;
+    const vH  = 240;
+    const plotW = vW - pad.left - pad.right;
+    const plotH = vH - pad.top - pad.bottom;
 
-  if (barsEl) {
-    barsEl.innerHTML = yearKeywords.map((y, i) => {
-      const heightPct = Math.max(8, (y.count / maxCount) * 85);
-      const delay = 0.1 + i * 0.08;
-      const countDelay = 0.4 + i * 0.08;
+    const barW   = Math.min(44, plotW / n * 0.55);
+    const stepX  = plotW / n;
+    const cx     = (i) => pad.left + stepX * i + stepX / 2;
+    const cy     = (v) => pad.top + plotH - (v / maxCount) * plotH;
+    const barBot = pad.top + plotH;
+
+    const gridLines = [0, Math.round(maxCount / 2), maxCount];
+    let gridSvg = '';
+    gridLines.forEach(v => {
+      const y = cy(v);
+      gridSvg += `<line x1="${pad.left}" y1="${y}" x2="${vW - pad.right}" y2="${y}" stroke="currentColor" opacity="0.1" stroke-dasharray="4 4"/>`;
+      gridSvg += `<text x="${pad.left - 6}" y="${y + 4}" text-anchor="end" fill="currentColor" opacity="0.4" font-size="11" font-weight="600">${v}</text>`;
+    });
+
+    const pts = yearKeywords.map((y, i) => ({ x: cx(i), y: cy(y.count) }));
+
+    let lineD = 'M' + pts[0].x + ' ' + pts[0].y;
+    for (let i = 1; i < pts.length; i++) {
+      const mx = (pts[i-1].x + pts[i].x) / 2;
+      lineD += ` C${mx} ${pts[i-1].y} ${mx} ${pts[i].y} ${pts[i].x} ${pts[i].y}`;
+    }
+    const areaD = lineD + ` L${pts[n-1].x} ${barBot} L${pts[0].x} ${barBot} Z`;
+
+    let barsSvg = '';
+    yearKeywords.forEach((y, i) => {
+      const x  = cx(i) - barW / 2;
+      const bH = Math.max(3, (y.count / maxCount) * plotH);
+      const bY = barBot - bH;
       const [c1, c2] = y.color;
-      return `
-        <div class="cbar-group" data-idx="${i}">
-          <div class="cbar" style="height:${heightPct}%; animation-delay:${delay}s; background: linear-gradient(180deg, ${c1}, ${c2});">
-            <div class="cbar-inner"></div>
-            <div class="cbar-shine"></div>
-            <span class="cbar-count" style="animation-delay:${countDelay}s; color: ${c2}">${y.count}</span>
-          </div>
-          <span class="cbar-year">${y.year}</span>
-        </div>
-      `;
-    }).join('');
+      const gid = 'bg' + i;
+      const sid = 'bs' + i;
+      const delay = (0.12 + i * 0.08).toFixed(2);
+      const cDelay = (0.55 + i * 0.08).toFixed(2);
+      const dDelay = (0.7 + i * 0.09).toFixed(2);
 
-    // Tooltip interaction
-    barsEl.querySelectorAll('.cbar-group').forEach(g => {
-      g.addEventListener('mouseenter', (e) => {
-        const idx = parseInt(g.dataset.idx);
+      barsSvg += `
+        <defs>
+          <linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="${c1}"/>
+            <stop offset="100%" stop-color="${c2}"/>
+          </linearGradient>
+          <clipPath id="${sid}"><rect x="${x}" y="${bY}" width="${barW}" height="${bH}" rx="6"/></clipPath>
+        </defs>
+        <rect class="uc-bar" x="${x}" y="${bY}" width="${barW}" height="${bH}" rx="6" fill="url(#${gid})"
+          style="animation-delay:${delay}s"/>
+        <rect clip-path="url(#${sid})" class="uc-shine" x="${x}" y="${bY}" width="${barW/2}" height="${bH}"
+          fill="url(#shine-grad)" opacity="0.5" style="animation-delay:${(1.2 + i*0.15).toFixed(2)}s"/>
+        <text class="uc-count" x="${cx(i)}" y="${bY - 8}" text-anchor="middle"
+          fill="${c2}" font-size="12" font-weight="800"
+          style="animation-delay:${cDelay}s">${y.count}</text>
+        <text x="${cx(i)}" y="${barBot + 18}" text-anchor="middle"
+          fill="currentColor" opacity="0.5" font-size="12" font-weight="700">${y.year}</text>
+        <circle class="uc-dot" cx="${pts[i].x}" cy="${pts[i].y}" r="4.5"
+          fill="${c1}" stroke="white" stroke-width="2"
+          style="animation-delay:${dDelay}s; transform-origin: ${pts[i].x}px ${pts[i].y}px"/>
+        <rect class="uc-hit" data-idx="${i}" x="${cx(i) - stepX/2}" y="${pad.top}" width="${stepX}" height="${plotH + pad.bottom}" fill="transparent"/>
+      `;
+    });
+
+    chartWrap.innerHTML = `
+      <svg viewBox="0 0 ${vW} ${vH}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="area-g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="var(--color-morandi-sage)" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="var(--color-morandi-sage)" stop-opacity="0.02"/>
+          </linearGradient>
+          <linearGradient id="shine-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="white" stop-opacity="0"/>
+            <stop offset="50%"  stop-color="white" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        ${gridSvg}
+        <path class="uc-area" d="${areaD}" fill="url(#area-g)"/>
+        <path class="uc-line" d="${lineD}" fill="none" stroke="var(--color-morandi-rose)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${barsSvg}
+      </svg>`;
+
+    chartWrap.querySelectorAll('.uc-hit').forEach(hit => {
+      hit.addEventListener('mouseenter', () => {
+        const idx = parseInt(hit.dataset.idx);
         const y = yearKeywords[idx];
         tooltipEl.querySelector('.chart-tooltip-year').textContent = y.year + ' 年';
         tooltipEl.querySelector('.chart-tooltip-count').textContent = y.count + ' 篇政策文件';
-        tooltipEl.querySelector('.chart-tooltip-kws').innerHTML = y.keywords.slice(0, 5).map(k =>
+        tooltipEl.querySelector('.chart-tooltip-kws').innerHTML = y.keywords.slice(0,5).map(k =>
           '<span class="chart-tooltip-kw">' + k + '</span>'
         ).join('');
         tooltipEl.style.display = 'block';
-
-        const rect = g.getBoundingClientRect();
-        const sRect = sectionEl.getBoundingClientRect();
-        tooltipEl.style.left = (rect.left - sRect.left + rect.width / 2 - 70) + 'px';
-        tooltipEl.style.top = (rect.top - sRect.top - tooltipEl.offsetHeight - 8) + 'px';
+        const svgRect = chartWrap.querySelector('svg').getBoundingClientRect();
+        const secRect = sectionEl.getBoundingClientRect();
+        const scale = svgRect.width / vW;
+        const tipX = svgRect.left - secRect.left + cx(idx) * scale - 70;
+        const tipY = svgRect.top - secRect.top + pts[idx].y * scale - tooltipEl.offsetHeight - 12;
+        tooltipEl.style.left = tipX + 'px';
+        tooltipEl.style.top  = Math.max(0, tipY) + 'px';
       });
-      g.addEventListener('mouseleave', () => {
-        tooltipEl.style.display = 'none';
-      });
+      hit.addEventListener('mouseleave', () => { tooltipEl.style.display = 'none'; });
     });
-  }
-
-  // Build SVG area + line paths
-  const areaPath = document.getElementById('area-path');
-  const linePath = document.getElementById('line-path');
-  if (areaPath && linePath && yearKeywords.length > 1) {
-    const w = 800;
-    const h = 220;
-    const n = yearKeywords.length;
-    const stepX = w / (n - 1);
-    const points = yearKeywords.map((y, i) => ({
-      x: i * stepX,
-      y: h - (y.count / maxCount) * h * 0.85 - h * 0.05
-    }));
-
-    let lineD = 'M' + points[0].x + ' ' + points[0].y;
-    for (let i = 1; i < points.length; i++) {
-      const cx = (points[i - 1].x + points[i].x) / 2;
-      lineD += ' C' + cx + ' ' + points[i - 1].y + ' ' + cx + ' ' + points[i].y + ' ' + points[i].x + ' ' + points[i].y;
-    }
-    linePath.setAttribute('d', lineD);
-
-    const areaD = lineD + ' L' + points[n - 1].x + ' ' + h + ' L' + points[0].x + ' ' + h + ' Z';
-    areaPath.setAttribute('d', areaD);
   }
 
   // Build keyword cloud
